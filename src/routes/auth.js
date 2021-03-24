@@ -1,30 +1,32 @@
 const express = require('express');
 const router = express.Router();
-const { query } = require('./db');
-const verifyJWT = require('./helpers/verify_jwt');
+const { query } = require('../db');
+const verifyJWT = require('../helpers/verify_jwt');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const config = require('../config.json');
+const config = require('../../config.json');
+const mailer = require('../helpers/mailer');
+const { response } = require('express');
 
 let createJWT = (record, expiresIn) => {
 	let { username, email, role } = record;
 	return jwt.sign({ username, email, role }, config.jwt_secret, { expiresIn });
 };
 
-app.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
 	let { username, password } = req.body;
 	try {
 		let result = await query(`SELECT * FROM USER WHERE username LIKE '${username}'`);
 		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
 		if (!bcrypt.compareSync(password, result[0].password)) { return res.status(400).json({ message: 'username/password incorrect' }); }
 		let token = createJWT(result[0], '24h');
-		res.status(200).json({ token, message: 'Logged in successfully!' });
+		res.status(200).json({ token, message: 'Logged in successfully!', expiresIn: 24 * 3600 });
 	} catch (error) {
 		res.status(500).json({ message: error });
 	}
 });
 
-app.post('/register', verifyJWT, async (req, res) => {
+router.post('/register', verifyJWT, async (req, res) => {
 	if (req.tokenDetails.role !== 'admin')
 		return res.status(400).json({ message: 'only admin can register users' });
 	let { username, password, email, role } = req.body;
@@ -40,7 +42,7 @@ app.post('/register', verifyJWT, async (req, res) => {
 	}
 });
 
-app.post('/forceremoveuser', verifyJWT, async (req, res) => {
+router.post('/forceremoveuser', verifyJWT, async (req, res) => {
 
 	if (req.tokenDetails.role !== 'admin')
 		return res.status(400).json({ message: 'only admin can forceremove users' });
@@ -53,13 +55,22 @@ app.post('/forceremoveuser', verifyJWT, async (req, res) => {
 	}
 });
 
-app.post('/forgotpassword', async (req, res) => {
-	let { username } = req.body.username;
+router.post('/staysignedin', verifyJWT, async (req, res) => {
+	res.status(200).json({ token: createJWT(req.tokenDetails, '365d') });
+});
+
+router.post('/forgotpassword', async (req, res) => {
+	let { username } = req.body;
 	try {
-		let user = await query(`SELECT * FROM USER WHERE USERNAME LIKE '${username}'`);
-		if (user.length == 0)
+		let result = await query(`SELECT * FROM USER WHERE username LIKE '${username}'`);
+		if (result.length == 0)
 			return res.status(400).json({ message: 'Invalid username!' });
-// 
+		let token = createJWT(result[0], '24h');
+		let { email } = result[0];
+		if (mailer(email, `${config.hostname}/resetpassword?token=${token}`))
+			return res.status(200).json({ message: 'Password reset instructions sent to mail' });
+		else
+			return res.status(500).json({ message: 'Error sending mail to corresponding username' });
 	} catch (error) {
 		return res.status(500).json({ message: error });
 	}
