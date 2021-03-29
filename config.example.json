@@ -12,11 +12,12 @@
 		{
 			"username": "admin",
 			"password": "admin",
+			"name": "admin",
 			"email": "admin@admin.com"
 		}
 	],
 	"emailAuth": {
-		"user": "your ymail",
+		"user": "your email",
 		"pass": "your app password"
 	},
 	"hostname":"https://localhost:8080"
