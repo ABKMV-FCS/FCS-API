@@ -103,8 +103,8 @@ create table sem_timing(
 );
 
 create table faculty_subject(
-	coursecode varchar(10) not null,
 	faculty varchar(50) not null,
+	coursecode varchar(10) not null,
 	class varchar(5) not null,
 	dept varchar(10) not null,
 	sem int not null,
@@ -119,9 +119,9 @@ create table subjects_handled(
 );
 
 create table course(
-	code varchar(50) not null,
+	coursecode varchar(50) not null,
 	name varchar(100) not null,
-	primary key(code)
+	primary key(coursecode)
 );
 
 create table dept_class(
@@ -138,4 +138,11 @@ create table profilechangerequest(
 	name varchar(100),
 	email varchar(100),
 	primary key(faculty)
+);
+
+create table sem_course(
+	dept varchar(10) primary key,
+	sem int not null,
+	coursecode varchar(50) not null,
+	foreign key (coursecode) references course(coursecode)
 );
