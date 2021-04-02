@@ -1,177 +1,112 @@
 const express = require('express');
 const router = express.Router();
 const { query } = require('../db');
-const verifyJWT = require('../helpers/verify_jwt');
+const moment = require('moment');
 
 router.post('/requestprofilechange', async (req, res) => {
-	let { faculty_username, profilephoto, qualifications, phone, name, isactive, email, coursecodes } = req.body;
-	try {
-		let result = await query(`SELECT * FROM profilechangerequests WHERE faculty_username LIKE '${faculty_username}'`);
-		if (result.length == 0) {
-			await query(`INSERT INTO profilechangerequests values("${faculty_username}","${profilephoto}","${qualifications}","${phone}","${name}","${isactive}","${email}","${coursecodes}");`);
-			res.status(200).json({ message: 'Request sent Successfully!' });
-		} else {
-			console.log(req.body.faculty_username)
-			await query(`UPDATE profilechangerequests SET profilephoto = "${profilephoto}", qualifications = "${qualifications}", phone = "${phone}", name = "${name}", isactive = "${isactive}", email = "${email}",coursecodes="${coursecodes}" WHERE faculty_username="${faculty_username}";`);
-			res.status(200).json({ message: 'Details Updated Successfully!' });;
+	let { username } = req.tokenDetails;
+	let { profilephoto, qualifications, phone, name, email } = req.body;
+	try {	
+		let result = await query(`REPLACE INTO profilechangerequest VALUES('${username}','${profilephoto}','${qualifications}','${phone}','${name}','${email}')`);
+		if(result.affectedRows>0){
+			return res.status(200).json({ message: 'Request sent Successfully!' });
 		}
-
+		else{
+			return res.status(500).json({ message: 'error occurred while requesting profile change!' });
+		}
+		
 	} catch (error) {
-		res.status(500).json({ message: error });
+		return res.status(500).json({ message: error });
 		console.log(error)
 	}
 });
 
-router.post('/showprofilechangerequests', verifyJWT, async (req, res) => {
+router.post('/showprofilechangerequest', async (req, res) => {
 	if (req.tokenDetails.role !== 'admin')
 		return res.status(400).json({ message: 'only admin can register users' });
 	try {
-		let result = await query(`SELECT * FROM profilechangerequests`);
+		let result = await query(`SELECT * FROM profilechangerequest`);
 		if (result.length == 0) {
 			return res.status(200).json({ message: 'No Requests so far!' });
 		} else {
-			res.status(200).json({ requests: result })
+			return res.status(200).json({ requests: result })
 		}
 
 	} catch (error) {
-		res.status(500).json({ message: error });
+		return res.status(500).json({ message: error });
 		console.log(error)
 	}
 });
 
 
-router.post('/changeuserinfo', verifyJWT, async (req, res) => {
+router.post('/changeuserinfo', async (req, res) => {
 	if (req.tokenDetails.role !== 'admin')
 		return res.status(400).json({ message: 'only admin can change userinfo' });
-	let { faculty_username } = req.body;
-
+	let { faculty,profilephoto, qualifications, phone, name, email } = req.body;
+	let result;
 	try {
-		let result = await query(`select * from profilechangerequests where faculty_username="${faculty_username}"`);
-		await query(`UPDATE USER SET name = "${result[0].name}", phone= "${result[0].phone}", email="${result[0].email}" WHERE username="${faculty_username}";`);
-		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
-		res.status(200).json({ message: 'user info updated successfully!' });
+		await query(`UPDATE USER SET name = '${name}', phone= '${phone}', email='${email}',profilephoto='${profilephoto}',qualifications='${qualifications}' WHERE username='${faculty}';`);
+		return res.status(200).json({ message: 'user info updated successfully!' });
 	} catch (error) {
-		res.status(500).json({ message: error });
+		return res.status(500).json({ message: error });
 	}
 });
 
 router.get('/readuserinfo/:username', async (req, res) => {
-
 	let { username } = req.params;
 	try {
-		let result = await query(`select name,phone,email from user where username="${username}"`);
-		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
-		res.status(200).json({ userinfo: result });
+		let result = await query(`select * from user where username='${username}'`);
+		if (result.length == 0) { return res.status(400).json({ message: 'username not found' }); return; }
+		delete result[0]['password']
+		return res.status(200).json({ userinfo: result });
 	} catch (error) {
-		res.status(500).json({ message: error });
+		return res.status(500).json({ message: error });
 	}
 });
 
-
-router.post('/changeprofileinfo', verifyJWT, async (req, res) => {
-	if (req.tokenDetails.role !== 'admin')
-		return res.status(400).json({ message: 'only admin can change profileinfo' });
-	let { faculty_username } = req.body;
-
-	try {
-		let result = await query(`select * from profilechangerequests where faculty_username="${faculty_username}"`);
-		await query(`UPDATE profile SET profilephoto="${result[0].profilephoto}",qualifications = "${result[0].qualifications}" WHERE faculty_username="${faculty_username}";`);
-		if (result[0].length == 0) { res.status(400).json({ message: 'username not found' }); return; }
-		res.status(200).json({ message: 'profile info updated successfully!' });
-	} catch (error) {
-		res.status(500).json({ message: error });
-	}
-});
-router.get('/readprofileinfo/:username', async (req, res) => {
-
-	let { username } = req.params;
-	try {
-		let result = await query(`select profilephoto,qualifications from profile where faculty_username="${username}"`);
-		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
-		res.status(200).json({ profileinfo: result });
-	} catch (error) {
-		res.status(500).json({ message: error });
-	}
-});
-
-router.post('/changesubjectshandledinfo', verifyJWT, async (req, res) => {
+router.post('/changesubjectshandledinfo', async (req, res) => {
 	if (req.tokenDetails.role !== 'admin')
 		return res.status(400).json({ message: 'only admin can change subjecthandledinfo' });
-	let { faculty_username } = req.body;
+	let { faculty, coursecodes } = req.body;
 	try {
-		let result = await query(`select * from profilechangerequests where faculty_username="${faculty_username}"`);
-		await query(`UPDATE subjectshandled SET coursecodes="${result[0].coursecodes}" WHERE faculty_username="${faculty_username}";`);
-		console.log(result)
-		if (result.length == 0) { res.status(400).json({ message: 'username/coursecode not found' }); return; }
-		res.status(200).json({ message: 'subjectshandled info updated successfully!' });
+		await query(`DELETE FROM subjects_handled WHERE faculty='${faculty}';`);
+		for (let index = 0; index < coursecodes.length; index++) {
+			await query(`INSERT INTO subjects_handled VALUES('${faculty}','${coursecodes[index]}');`);
+		}
+		return res.status(200).json({ message: 'subjects_handled info updated successfully!' });
 	} catch (error) {
-		res.status(500).json({ message: error });
+		console.log(error);
+		return res.status(500).json({ message: error });
 	}
 });
 router.get('/readsubjectshandledinfo/:username', async (req, res) => {
 
 	let { username } = req.params;
 	try {
-		let result = await query(`select coursecodes from subjectshandled where faculty_username="${username}"`);
-		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
-		res.status(200).json({ subjectshandledinfo: result });
+		let result = await query(`select coursecode from subjects_handled where faculty='${username}'`);
+		if (result.length == 0) { return res.status(400).json({ message: 'username not found' }); return; }
+		return res.status(200).json({ subjects_handledinfo: result });
 	} catch (error) {
-		res.status(500).json({ message: error });
+		return res.status(500).json({ message: error });
 	}
 });
 
-router.get('/deleteprofilerequest/:faculty_username', verifyJWT, async (req, res) => {
-	let { faculty_username } = req.params;
+router.post('/deleteprofile', async (req, res) => {
+	let { faculty, datetime } = req.body;
 	try {
-		let result = await query(`select * from profile where faculty_username = "${faculty_username}"`);
-		let coursecodes = await query(`select coursecodes from subjectshandled where faculty_username="${faculty_username};"`);
-		let facultych = await query(`select day,slot,dept,class,sem,academic_year from facultych where faculty="${faculty_username}"`);
-		let examslots = await query(`select startdatetime, enddatetime,	subject, sem, type, academicyear, dep from examslots where faculty="${faculty_username}"`);
-		if (result.length !=0 && coursecodes.length == 0 && facultych.length == 0 && examslots.length == 0 ) { 
-			res.status(200).json({ message: 'no dependencies found! Do you wish to delete??' });
-			return; 
-		}else if(result.length !=0 && (coursecodes.length != 0 || facultych.length != 0 || examslots.length != 0 )) {
-			res.status(200).json({ message: 'dependencies found! Do you wish to delete the dependencies as well??', dependencies: {coursecodes,facultych,examslots}});
+		datetime = moment(new Date(datetime)).utc(true).format('yyyy-MM-DD')
+		let examslots = await query(`select * from exam_slot where faculty='${faculty}' and date>='${datetime}'`);
+		let facultysubjects = await query(`select * from faculty_subject where faculty LIKE '${faculty}'`);
+		if (facultysubjects.length == 0 && examslots.length == 0) {
+			await query(`UPDATE USER SET isactive = 'False' WHERE username='${faculty}';`);
+			return res.status(200).json({ message: 'profile deletion successful!' });
+		} else {
+			return res.status(200).json({ message: 'dependencies found! do change the details before deletion.', dependencies: { facultysubjects, examslots } });
 		}
-		else{
-			res.status(400).json({ message: 'no such username found' });
-		}
-		
 	} catch (error) {
 		console.log(error)
-		res.status(500).json({ message: error });
+		return res.status(500).json({ message: error });
 	}
 });
 
-router.post('/deleteprofile', verifyJWT, async (req, res) => {
-	if (req.tokenDetails.role !== 'admin')
-		return res.status(400).json({ message: 'only admin can delete profile' });
-	let { faculty_username } = req.body;
-	try {
-		let result = await query(`select * from profile where faculty_username = "${faculty_username}"`);
-		let coursecodes = await query(`select coursecodes from subjectshandled where faculty_username="${faculty_username};"`);
-		let facultych = await query(`select day,slot,dept,class,sem,academic_year from facultych where faculty_username="${faculty_username}"`);
-		let examslots = await query(`select startdatetime, enddatetime,	subject, sem, type, academicyear, dep from examslots where faculty="${faculty_username}"`);
-		if (result.length !=0 && coursecodes.length == 0 && facultych.length == 0 && examslots.length == 0 ) { 
-			await query(`delete from profile where faculty_username = "${faculty_username}"`);
-			await query(`delete from user where username = "${faculty_username}"`);
-			await query(`delete from profilechangerequests where faculty_username = "${faculty_username}"`);
-			res.status(200).json({ message: 'deletion of profile successful' });
-		}else if(result.length !=0 && (coursecodes.length != 0 || facultych.length != 0 || examslots.length != 0 )) {
-			await query(`delete from facultych where faculty_username="${faculty_username}"`);
-			await query(`delete from examslots where faculty="${faculty_username}"`);
-			await query(`delete from profile where faculty_username = "${faculty_username}"`);
-			await query(`delete from subjectshandled where faculty_username = "${faculty_username}"`);
-			await query(`delete from user where username = "${faculty_username}"`);
-			await query(`delete from profilechangerequests where faculty_username = "${faculty_username}"`);
-			res.status(200).json({ message: 'deletion of profile successful' });
-		}
-		else{
-			res.status(400).json({ message: 'no such username found' });
-		}
-		
-	} catch (error) {
-		res.status(500).json({ message: error });
-	}
-});
 module.exports = router;
