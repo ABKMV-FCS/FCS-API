@@ -8,11 +8,12 @@ let state = {
 
 exports.connect = done => {
 	state.pool = mysql.createConnection(config.sqlConnectionDetails);
-	state.pool.connect()
-	done();
+	state.pool.connect((err) => {
+		done(err);
+	});
 };
 
-exports.query = ( sql, args )=> {
-	return util.promisify( state.pool.query )
-	  .call( state.pool, sql, args );
-  };
+exports.query = (sql, args) => {
+	return util.promisify(state.pool.query)
+		.call(state.pool, sql, args);
+};
