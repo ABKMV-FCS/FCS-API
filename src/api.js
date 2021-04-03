@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const verifyJWT = require('./helpers/verify_jwt');
 
 router.use('/auth',require('./routes/auth'))
-router.use('/profile',require('./routes/profile'))
+router.use('/profile',verifyJWT,require('./routes/profile'))
+router.use('/timetable',verifyJWT,require('./routes/timetable'))
 module.exports=router;
