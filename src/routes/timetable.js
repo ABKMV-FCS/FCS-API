@@ -22,7 +22,7 @@ router.post('/facultytimetabledownload', async (req, res) => {
   let { academic_year, faculty, odd } = req.body;
   try {
     let result = await query(`
-    select tt.day, tt.slot, tt.coursecode, tt.class, tt.dept, tt.sem from (faculty_subject fs inner join timetable tt on fs.coursecode = tt.coursecode and fs.class = tt.class and fs.sem = tt.sem and fs.academic_year = tt.academic_year) where fs.academic_year = '${academic_year}' and fs.faculty = '${faculty}' and MOD(fs.sem, 2) = '${odd === 'odd' ? 1 : 0}'; `);
+    select tt.day, tt.slot, tt.coursecode, tt.section, tt.dept, tt.sem from (faculty_subject fs inner join timetable tt on fs.coursecode = tt.coursecode and fs.section = tt.section and fs.sem = tt.sem and fs.academic_year = tt.academic_year) where fs.academic_year = '${academic_year}' and fs.faculty = '${faculty}' and MOD(fs.sem, 2) = '${odd === 'odd' ? 1 : 0}'; `);
     let coursename;
     for (let index = 0; index < result.length; index++) {
       coursename = await query(`SELECT name from course WHERE code = '${result[index].coursecode}'`);
@@ -121,7 +121,7 @@ router.post('/deleteclassesunderdept', async (req, res) => {
   let { dept, section } = req.body;
   try {
     let result = await query(`select * from dept_class where dept like '${dept}' and section like '${section}';`);
-    if (result.length == 0) { return res.status(400).json({ message: 'class not found' }); return; }
+    if (result.length == 0) { return res.status(400).json({ message: 'section not found' }); return; }
     await query(`delete from dept_class where dept like '${dept}' and section like '${section}';`);
     return res.status(200).json({ message: 'deletion successful' });
   } catch (error) {
