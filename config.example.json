@@ -12,8 +12,12 @@
 		{
 			"username": "admin",
 			"password": "admin",
+			"email": "admin@admin.com",
+			"phone": "123123123",
 			"name": "admin",
-			"email": "admin@admin.com"
+			"isactive": "true",
+			"profilephoto": null,
+			"qualifications": "MBA"
 		}
 	],
 	"emailAuth": {
