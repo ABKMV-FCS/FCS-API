@@ -20,7 +20,7 @@ router.post('/login', async (req, res) => {
 		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
 		if (!bcrypt.compareSync(password, result[0].password)) { return res.status(400).json({ message: 'username/password incorrect' }); }
 		let token = createJWT(result[0], '24h');
-		res.status(200).json({ token, name: result[0].name, message: 'Logged in successfully!', expiration: 24*3600*1000 });
+		res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: 24*60 });
 	} catch (error) {
 		res.status(500).json({ message: error });
 	}
@@ -29,10 +29,10 @@ router.post('/login', async (req, res) => {
 router.post('/register', verifyJWT, async (req, res) => {
 	if (req.tokenDetails.role !== 'admin')
 		return res.status(400).json({ message: 'only admin can register users' });
-	let { username, password, email, name, role } = req.body;
+	let { username, password, email, name, role, phone, qualifications, profilephoto } = req.body;
 	try {
 		password = bcrypt.hashSync(password, 12);
-		await query(`INSERT INTO USER VALUES('${username}','${password}','${name}','${email}','${role}')`);
+		await query(`INSERT INTO USER VALUES('${username}','${password}','${email}','${role}','${phone}','${name}','true',${profilephoto},'${qualifications}')`);
 		res.status(200).json({ message: 'Registered Successfully!' });
 	} catch (error) {
 		if (error.code === 'ER_DUP_ENTRY') {
