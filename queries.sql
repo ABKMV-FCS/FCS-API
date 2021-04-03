@@ -51,3 +51,9 @@ delete from course where coursecode like '$req.body.coursecode';
 
 insert into sem_courses values('$req.body.dept','$req.body.sem','$req.body.coursecode');
 delete from sem_course where dept like '$req.body.dept' and sem like '$req.body.sem' and coursecode like '$req.body.coursecode';
+
+-- populating calendar
+
+-- check for faculty handling
+select count(*) from subjects_handled where faculty like '$req.body.faculty' and coursecode like '$req.body.coursecode';
+insert into faculty_subject values('$req.body.coursecode','$req.body.faculty','class','dept','sem','ay') 
