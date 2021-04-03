@@ -3,21 +3,34 @@ CREATE DATABASE FCS;
 use FCS;
 
 drop table timetable;
-drop table active_sem;
-drop table dep_duration;
-drop table exam_slot;
-drop table event;
-drop table holiday;
-drop table holiday_template;
-drop table user;
-drop table calendar;
-drop table faculty_subject;
-drop table sem_timing;
-drop table subjects_handled;
-drop table course;
-drop table dept_class;
-drop table profilechangerequest;
 
+drop table active_sem;
+
+drop table dep_duration;
+
+drop table exam_slot;
+
+drop table event;
+
+drop table holiday;
+
+drop table holiday_template;
+
+drop table user;
+
+drop table calendar;
+
+drop table faculty_subject;
+
+drop table sem_timing;
+
+drop table subjects_handled;
+
+drop table course;
+
+drop table dept_class;
+
+drop table profilechangerequest;
 
 CREATE TABLE user(
 	username varchar(50) primary key,
@@ -35,11 +48,11 @@ create table timetable(
 	slot int not null,
 	day varchar(3) not null,
 	coursecode varchar(10) not null,
-	class varchar(5) not null,
+	section varchar(5) not null,
 	dept varchar(10) not null,
 	sem int not null,
 	academic_year int not null,
-	primary key(slot,day,coursecode,class,dept,sem,academic_year)
+	primary key(slot, day, section, dept, sem, academic_year)
 );
 
 create table active_sem(
@@ -62,13 +75,13 @@ create table exam_slot(
 	faculty varchar(50) not null,
 	type varchar(10) not null,
 	academic_year int not null,
-	primary key(coursecode,sem,dept,type,academic_year)
+	primary key(coursecode, sem, dept, type, academic_year)
 );
 
 create table event(
 	date varchar(10) not null,
 	description varchar(500) not null,
-	primary key(date,description)
+	primary key(date, description)
 );
 
 create table holiday(
@@ -87,11 +100,19 @@ create table calendar(
 	date varchar(10) not null,
 	slot int not null,
 	coursecode varchar(10) not null,
-	class varchar(5) not null,
+	section varchar(5) not null,
 	dept varchar(10) not null,
 	sem int not null,
 	academic_year int not null,
-	primary key(date,slot,coursecode,class,dept,sem,academic_year)
+	primary key(
+		date,
+		slot,
+		coursecode,
+		section,
+		dept,
+		sem,
+		academic_year
+	)
 );
 
 create table sem_timing(
@@ -99,23 +120,30 @@ create table sem_timing(
 	academic_year int not null,
 	start_date varchar(10) not null,
 	end_date varchar(10) not null,
-	primary key(sem,academic_year)
+	primary key(sem, academic_year)
 );
 
 create table faculty_subject(
 	faculty varchar(50) not null,
 	coursecode varchar(10) not null,
-	class varchar(5) not null,
+	section varchar(5) not null,
 	dept varchar(10) not null,
 	sem int not null,
 	academic_year int not null,
-	primary key(coursecode,faculty,class,dept,sem,academic_year)
+	primary key(
+		coursecode,
+		faculty,
+		section,
+		dept,
+		sem,
+		academic_year
+	)
 );
 
 create table subjects_handled(
 	faculty varchar(50) not null,
 	coursecode varchar(10) not null,
-	primary key(faculty,coursecode)
+	primary key(faculty, coursecode)
 );
 
 create table course(
@@ -126,9 +154,11 @@ create table course(
 
 create table dept_class(
 	dept varchar(10) not null,
-	class varchar(5) not null,
-	primary key(dept,class)
+	section varchar(5) not null,
+	primary key(dept, section)
 );
+
+
 
 create table profilechangerequest(
 	faculty varchar(50),
@@ -144,5 +174,5 @@ create table sem_course(
 	dept varchar(10) primary key,
 	sem int not null,
 	coursecode varchar(50) not null,
-	foreign key (coursecode) references course(coursecode)
+	foreign key (coursecode) references course(code)
 );

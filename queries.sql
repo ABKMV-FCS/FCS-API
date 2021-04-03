@@ -27,16 +27,16 @@ from
 		and fs.class = tt.class
 		and fs.sem = tt.sem
 		and fs.academic_year = tt.academic_year
-	) rs
+	)
 where
-	rs.academic_year = $ { req.body.academic_year }
-	and rs.faculty = $ { req.body.faculty }
-	and MOD(rs.sem, 2) == $ { req.body.odd == = 'odd' ?1 :0 };
+	fs.academic_year = $ { req.body.academic_year }
+	and fs.faculty = $ { req.body.faculty }
+	and MOD(fs.sem, 2) == $ { req.body.odd == = 'odd' ?1 :0 };
 -- depts
 select dept from dep_duration;
 insert into dep_duration values ('$req.body.dept','$req.body.sems');
-update dept_duration set sems='${req.body.sems}' where dept like '$req.body.dept';
-delete from dept_duration where dept like '$req.body.dept';
+update dep_duration set sems='${req.body.sems}' where dept like '$req.body.dept';
+delete from dep_duration where dept like '$req.body.dept';
 
 -- class
 select class from dept_class where dept like '$req.body.dept';
@@ -45,9 +45,9 @@ delete from dept_class where dept like '$req.body.dept' and class like '$req.bod
 
 -- subjects under sem,dept
 insert into course values ('$req.body.coursecode','$req.body.name');
-update course set name='$req.body.name' where coursecode like '$req.body.coursecode';
-delete from course where coursecode like '$req.body.coursecode';
+update course set name='$req.body.name' where code like '$req.body.coursecode';
+delete from course where code like '$req.body.coursecode';
 
 
-insert into sem_courses values('$req.body.dept','$req.body.sem','$req.body.coursecode');
+insert into sem_course values('$req.body.dept','$req.body.sem','$req.body.coursecode');
 delete from sem_course where dept like '$req.body.dept' and sem like '$req.body.sem' and coursecode like '$req.body.coursecode';

@@ -4,4 +4,5 @@ const verifyJWT = require('./helpers/verify_jwt');
 
 router.use('/auth',require('./routes/auth'))
 router.use('/profile',verifyJWT,require('./routes/profile'))
+router.use('/timetable',verifyJWT,require('./routes/timetable'))
 module.exports=router;
