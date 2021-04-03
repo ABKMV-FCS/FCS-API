@@ -21,7 +21,7 @@ router.post('/requestprofilechange', async (req, res) => {
 	}
 });
 
-router.post('/showprofilechangerequest', async (req, res) => {
+router.get('/showprofilechangerequest', async (req, res) => {
 	if (req.tokenDetails.role !== 'admin')
 		return res.status(400).json({ message: 'only admin can register users' });
 	try {
@@ -41,12 +41,27 @@ router.post('/showprofilechangerequest', async (req, res) => {
 
 router.post('/changeuserinfo', async (req, res) => {
 	if (req.tokenDetails.role !== 'admin')
-		return res.status(400).json({ message: 'only admin can change userinfo' });
-	let { faculty,profilephoto, qualifications, phone, name, email } = req.body;
-	let result;
+		res.status(400).json({ message: 'only admin can change userinfo' });
+	let { oldusername, username, profilephoto, qualifications, phone, name, email } = req.body;
 	try {
-		await query(`UPDATE USER SET name = '${name}', phone= '${phone}', email='${email}',profilephoto='${profilephoto}',qualifications='${qualifications}' WHERE username='${faculty}';`);
-		return res.status(200).json({ message: 'user info updated successfully!' });
+		await query(`UPDATE USER SET username = '${username}', name = '${name}', phone= '${phone}', email='${email}',profilephoto='${profilephoto}',qualifications='${qualifications}' WHERE username='${oldusername}';`);
+		 res.status(200).json({ message: 'user info updated successfully!' });
+	} catch (error) {
+		if (error.code === 'ER_DUP_ENTRY') {
+			res.status(400).json({ message: 'username already taken' });
+		}
+		res.status(500).json({ message: error });
+	}
+});
+
+router.get('/getallusers', async (req, res) => {
+	if (req.tokenDetails.role !== 'admin')
+		return res.status(400).json({ message: 'only admin can get all user info' });
+	try {
+		let results = await query(`select * from user where isactive='true'`);
+		if (results.length == 0) { return res.status(400).json({ message: 'no users found' }); return; }
+		for(result of results) delete result['password'];
+		return res.status(200).json({ users: results });
 	} catch (error) {
 		return res.status(500).json({ message: error });
 	}
