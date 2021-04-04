@@ -39,6 +39,36 @@ router.get('/showprofilechangerequest', async (req, res) => {
 	}
 });
 
+router.post('/acceptprofilechangerequest', async (req, res) => {
+	if (req.tokenDetails.role !== 'admin')
+		return res.status(400).json({ message: 'only admin can accept request' });
+	let { faculty } = req.body;
+	try {
+		let result = (await query(`select * FROM profilechangerequest where faculty like '${faculty}'`));
+		if (result.length == 0) return res.status(400).json({ message: 'No Requests Found!' });
+		let { name, phone, qualifications, profilephoto, email } = result[0];
+		await query(`UPDATE USER SET username = '${faculty}', name = '${name}', phone= '${phone}', email='${email}',profilephoto='${profilephoto}',qualifications='${qualifications}' WHERE username='${faculty}';`);
+		await query(`delete from profilechangerequest where faculty like '${faculty}'`);
+		res.status(200).json({ message: 'user info updated successfully!' });
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: error });
+	}
+});
+
+router.post('/rejectprofilechangerequest', async (req, res) => {
+	if (req.tokenDetails.role !== 'admin')
+		return res.status(400).json({ message: 'only admin can reject request' });
+	let { faculty } = req.body;
+	try {
+		await query(`delete from profilechangerequest where faculty like '${faculty}'`);
+		return res.status(200).json({ message: 'removed request' });
+	} catch (error) {
+		return res.status(500).json({ message: error });
+		console.log(error);
+	}
+});
+
 
 router.post('/changeuserinfo', async (req, res) => {
 	if (req.tokenDetails.role !== 'admin')
