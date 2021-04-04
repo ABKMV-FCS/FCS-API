@@ -132,7 +132,6 @@ create table faculty_subject(
 	academic_year int not null,
 	primary key(
 		coursecode,
-		faculty,
 		section,
 		dept,
 		sem,
@@ -171,8 +170,57 @@ create table profilechangerequest(
 );
 
 create table sem_course(
-	dept varchar(10) primary key,
+	dept varchar(10),
 	sem int not null,
 	coursecode varchar(50) not null,
+	primary key(dept,sem,coursecode),
 	foreign key (coursecode) references course(code)
 );
+
+insert into sem_course values('CSE','4','15CSE301');
+insert into sem_course values('CSE','4','15CSE302');
+insert into sem_course values('CSE','4','14cse235');
+insert into sem_course values('CSE','4','14cse237');
+insert into sem_course values('CSE','4','14cse238');
+insert into sem_course values('CSE','4','14cse239');
+
+insert into dep_duration values('CSE','8');
+insert into dep_duration values('ECE','8');
+insert into dep_duration values('EEE','8');
+insert into dep_duration values('MAT','6');
+
+insert into dept_class values('CSE','A');
+insert into dept_class values('CSE','B');
+insert into dept_class values('CSE','C');
+insert into dept_class values('MAT','A');
+insert into dept_class values('MAT','B');
+insert into dept_class values('MAT','C');
+insert into dept_class values('EEE','A');
+insert into dept_class values('EEE','B');
+
+insert into timetable values('1','THU','14cse235','c','cse','4','2018');
+insert into timetable values('2','THU','14cse237','c','cse','4','2018');
+insert into timetable values('3','THU','14cse238','c','cse','4','2018');
+insert into timetable values('4','THU','14cse239','c','cse','4','2018');
+
+	
+insert into faculty_subject values('15CSE301','admin1','C','CSE','4','2018');
+insert into faculty_subject values('15CSE302','admin1','C','CSE','4','2018');
+insert into faculty_subject values('14cse235','admin1','C','CSE','4','2018');
+insert into faculty_subject values('14cse237','admin1','C','CSE','4','2018');
+insert into faculty_subject values('14cse238','admin1','C','CSE','4','2018');
+insert into faculty_subject values('14cse239','admin1','C','CSE','4','2018');
+
+insert into active_sem values('1','2018');
+
+insert into course values('15CSE301','Database Management Systems');
+insert into course values('15CSE302','Theory of Computation');
+insert into course values('15CSE303','Computer Organisation and Architecture');
+insert into course values('14cse237','Embedded Systems');
+insert into course values('14cse235','Cloud Computing');
+insert into course values('14cse238','Operating Systems');
+insert into course values('14cse239','Compiler Design');
+
+insert into exam_slot values('2021-04-05','1','15CSE301','4','CSE','admin','p1','2018');
+insert into exam_slot values('2021-04-04','2','15CSE302','4','CSE','admin','p1','2018');
+insert into exam_slot values('2021-04-03','3','15CSE303','4','CSE','admin','p1','2018');
