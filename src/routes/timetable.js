@@ -8,9 +8,9 @@ router.post('/studenttimetabledownload', async (req, res) => {
     let result = await query(`SELECT slot, day, coursecode from Timetable WHERE section = '${section}' and sem = '${sem}' and dept = '${dept}' and academic_year = '${academic_year}' `);
     if (result.length == 0) { return res.status(200).json({ message: 'no data available' }); }
     let coursename;
-    for (let index = 0; index < result.length; index++) {
-      coursename = await query(`SELECT name from course WHERE code = '${result[index].coursecode}'`);
-      result[index]["coursename"] = coursename[0].name;
+    for (const r1 of result) {
+      coursename = await query(`SELECT name from course WHERE code = '${r1.coursecode}'`);
+      r1["coursename"] = coursename[0].name;
     }
     return res.status(200).json({ timetable: result, message: 'retrieval successful' });
   } catch (error) {
@@ -24,9 +24,9 @@ router.post('/facultytimetabledownload', async (req, res) => {
     let result = await query(`
     select tt.day, tt.slot, tt.coursecode, tt.section, tt.dept, tt.sem from (faculty_subject fs inner join timetable tt on fs.coursecode = tt.coursecode and fs.section = tt.section and fs.sem = tt.sem and fs.academic_year = tt.academic_year) where fs.academic_year = '${academic_year}' and fs.faculty = '${faculty}' and MOD(fs.sem, 2) = '${odd === 'odd' ? 1 : 0}'; `);
     let coursename;
-    for (let index = 0; index < result.length; index++) {
-      coursename = await query(`SELECT name from course WHERE code = '${result[index].coursecode}'`);
-      result[index]["coursename"] = coursename[0].name;
+    for (const r2 of result) {
+      coursename = await query(`SELECT name from course WHERE code = '${r2.coursecode}'`);
+      r2["coursename"] = coursename[0].name;
     }
     return res.status(200).json({ timetable: result, message: 'retrieval successful' });
   } catch (error) {
@@ -39,9 +39,9 @@ router.post('/examtimetabledownload', async (req, res) => {
   try {
     let result = await query(`SELECT date, exam_slot, faculty, coursecode from exam_slot WHERE type = '${type}' and sem = '${sem}' and dept = '${dept}' and academic_year = '${academic_year}' `);
     let coursename;
-    for (let index = 0; index < result.length; index++) {
-      coursename = await query(`SELECT name from course WHERE code = '${result[index].coursecode}'`);
-      result[index]["coursename"] = coursename[0].name;
+    for (const r3 of result) {
+      coursename = await query(`SELECT name from course WHERE code = '${r3.coursecode}'`);
+      r3["coursename"] = coursename[0].name;
     }
     return res.status(200).json({ timetable: result, message: 'retrieval successful' });
   } catch (error) {
@@ -188,7 +188,7 @@ router.post('/getcourselistundersem', async (req, res) => {
     let coursecodes = [];
     for(let result of results) {
       coursecodes.push(result.coursecode);
-    };
+    }
     return res.status(200).json({ coursecodes, message: 'retreival successful' });
   } catch (error) {
     return res.status(500).json({ message: error });

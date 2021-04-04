@@ -63,7 +63,6 @@ router.post('/rejectprofilechangerequest', async (req, res) => {
 		return res.status(200).json({ message: 'removed request' });
 	} catch (error) {
 		return res.status(500).json({ message: error });
-		console.log(error);
 	}
 });
 

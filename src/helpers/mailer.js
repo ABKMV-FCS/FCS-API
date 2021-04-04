@@ -14,16 +14,14 @@ const emailTransporter = nodemailer.createTransport({
 
 async function mailer(email, mailTxt, subject) {
 	try {
-		let res=await emailTransporter.sendMail({
+		await emailTransporter.sendMail({
 			from: `"Faculty Calendar Scheduler - ABKMV" <${config.emailAuth.user}>`,
 			to: email,
 			subject,
 			html: mailTxt
 		});
-		// console.log(res);
 		return true;
 	} catch (error) {
-		// console.log(error);
 		return false;
 	}
 }
