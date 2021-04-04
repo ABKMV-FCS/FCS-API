@@ -7,13 +7,19 @@ const bcrypt = require('bcryptjs');
 const config = require('../../config.json');
 const mailer = require('../helpers/mailer');
 const { response } = require('express');
+var bouncer = require ("express-bouncer")(500, 900000);
+bouncer.whitelist.push ("127.0.0.1");
+bouncer.blocked = function (req, res, next, remaining)
+{
+    res.status(429).json({message: "Too many requests have been made, please wait " + remaining / 1000 + " seconds"});
+};
 
 let createJWT = (record, expiresIn) => {
 	let { username, email, role } = record;
 	return jwt.sign({ username, email, role }, config.jwt_secret, { expiresIn });
 };
 
-router.post('/login', async (req, res) => {
+router.post('/login',bouncer.block, async (req, res) => {
 	let { username, password } = req.body;
 	try {
 		let result = await query(`SELECT * FROM USER WHERE username LIKE '${username}'`);
