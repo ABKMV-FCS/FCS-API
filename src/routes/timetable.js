@@ -5,7 +5,7 @@ const { query } = require('../db');
 router.post('/studenttimetabledownload', async (req, res) => {
   let { dept, section, sem, academic_year } = req.body;
   try {
-    let result = await query(`SELECT slot, day, coursecode from Timetable WHEREsection = '${section}' and sem = '${sem}' and dept = '${dept}' and academic_year = '${academic_year}' `);
+    let result = await query(`SELECT slot, day, coursecode from Timetable WHERE section = '${section}' and sem = '${sem}' and dept = '${dept}' and academic_year = '${academic_year}' `);
     if (result.length == 0) { return res.status(200).json({ message: 'no data available' }); }
     let coursename;
     for (let index = 0; index < result.length; index++) {
@@ -52,12 +52,9 @@ router.post('/examtimetabledownload', async (req, res) => {
 
 router.get('/readdept', async (req, res) => {
   try {
-    let result = await query(`select dept from dep_duration;`);
+    let result = await query(`select * from dep_duration;`);
     if (result.length == 0) { return res.status(400).json({ message: 'depts not found' }); return; }
-    for (let index = 0; index < result.length; index++) {
-      result[index] = result[index].dept;
-    }
-    return res.status(200).json({ deptinfo: result, message: 'retrieval successful' });
+    return res.status(200).json({ departments: result, message: 'retrieval successful' });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
@@ -72,9 +69,9 @@ router.post('/createdept', async (req, res) => {
   }
 });
 router.post('/updatedept', async (req, res) => {
-  let { sems, dept } = req.body;
+  let { sems, dept, olddept } = req.body;
   try {
-    await query(`update dep_duration set sems='${sems}' where dept like '${dept}';`);
+    await query(`update dep_duration set sems='${sems}', dept='${dept}' where dept like '${olddept}';`);
     return res.status(200).json({ message: 'update successful' });
   } catch (error) {
     return res.status(500).json({ message: error });
@@ -92,17 +89,22 @@ router.post('/deletedept', async (req, res) => {
   }
 });
 
-
+router.get('/getactivesem', async (req, res) => {
+  try {
+    let result = await query(`select * from active_sem;`);
+    if (result.length == 0) { return res.status(400).json({ message: 'active semester not found' }); return; }
+    return res.status(200).json({ odd: result[0].odd, message: 'retrieval successful' });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
 
 router.get('/readclassesunderdept/:dept', async (req, res) => {
   let { dept } = req.params
   try {
     let result = await query(`select section from dept_class where dept like '${dept}';`);
     if (result.length == 0) { return res.status(400).json({ message: 'depts not found' }); return; }
-    for (let index = 0; index < result.length; index++) {
-      result[index] = result[index].section;
-    }
-    return res.status(200).json({ deptinfo: result, message: 'retrieval successful' });
+    return res.status(200).json({ sections: result, message: 'retrieval successful' });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
@@ -111,6 +113,16 @@ router.post('/createclassesunderdept', async (req, res) => {
   let { dept, section } = req.body;
   try {
     await query(`insert into dept_class values ('${dept}','${section}');`);
+    return res.status(200).json({ message: 'insertion successful' });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
+
+router.post('/updateclassesunderdept', async (req, res) => {
+  let { dept, section, oldsection } = req.body;
+  try {
+    await query(`update dept_class set dept='${dept}', section='${section}' where section like '${oldsection}';`);
     return res.status(200).json({ message: 'insertion successful' });
   } catch (error) {
     return res.status(500).json({ message: error });
@@ -129,6 +141,15 @@ router.post('/deleteclassesunderdept', async (req, res) => {
   }
 });
 
+router.get('/readcourses', async (req, res) => {
+  try {
+    let result = await query(`select * from course;`);
+    return res.status(200).json({ courses: result, message: 'retrieval successful' });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
+
 router.post('/createcourse', async (req, res) => {
   let { coursecode, name } = req.body;
   try {
@@ -139,9 +160,9 @@ router.post('/createcourse', async (req, res) => {
   }
 });
 router.post('/updatecourse', async (req, res) => {
-  let { name, coursecode } = req.body;
+  let { name, coursecode, oldcoursecode } = req.body;
   try {
-    await query(`update course set name='${name}' where code like '${coursecode}';`);
+    await query(`update course set name='${name}', coursecode='${coursecode}' where coursecode like '${oldcoursecode}';`);
     return res.status(200).json({ message: 'update successful' });
   } catch (error) {
     return res.status(500).json({ message: error });
@@ -150,33 +171,37 @@ router.post('/updatecourse', async (req, res) => {
 router.post('/deletecourse', async (req, res) => {
   let { coursecode } = req.body;
   try {
-    let result = await query(`select * from course where code like '${coursecode}';`);
+    let result = await query(`select * from course where coursecode like '${coursecode}';`);
     if (result.length == 0) { return res.status(400).json({ message: 'course not found' }); return; }
     await query(`delete from sem_course where coursecode like '${coursecode}';`);
-    await query(`delete from course where code like '${coursecode}';`);
+    await query(`delete from course where coursecode like '${coursecode}';`);
     return res.status(200).json({ message: 'deletion successful' });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
 });
 
+router.post('/getcourselistundersem', async (req, res) => {
+  let { dept, sem } = req.body;
+  try {
+    let results = await query(`select * from sem_course where dept like '${dept}' and sem=${sem};`);
+    let coursecodes = [];
+    for(let result of results) {
+      coursecodes.push(result.coursecode);
+    };
+    return res.status(200).json({ coursecodes, message: 'retreival successful' });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
 
 router.post('/createcourseundersem', async (req, res) => {
-  let { coursecode, dept, sem } = req.body;
+  let { coursecodes, dept, sem } = req.body;
   try {
-    await query(`insert into sem_course values('${dept}','${sem}','${coursecode}');`);
+    await query(`delete from sem_course where dept like '${dept}' and sem=${sem};`);
+    console.log(req.body);
+    for(let coursecode of coursecodes) await query(`insert into sem_course values('${dept}',${sem},'${coursecode}');`);
     return res.status(200).json({ message: 'insertion successful' });
-  } catch (error) {
-    return res.status(500).json({ message: error });
-  }
-});
-router.post('/deletecourseundersem', async (req, res) => {
-  let { coursecode, dept, sem } = req.body;
-  try {
-    let result = await query(`select * from sem_course where dept like '${dept}' and sem like '${sem}' and coursecode like '${coursecode}';`);
-    if (result.length == 0) { return res.status(400).json({ message: 'course not found' }); }
-    await query(`delete from sem_course where dept like '${dept}' and sem like '${sem}' and coursecode like '${coursecode}';`);
-    return res.status(200).json({ message: 'deletion successful' });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
