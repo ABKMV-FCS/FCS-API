@@ -18,7 +18,6 @@ router.post('/requestprofilechange', async (req, res) => {
 
 	} catch (error) {
 		return res.status(500).json({ message: error });
-		console.log(error);
 	}
 });
 
@@ -35,7 +34,6 @@ router.get('/showprofilechangerequest', async (req, res) => {
 
 	} catch (error) {
 		return res.status(500).json({ message: error });
-		console.log(error);
 	}
 });
 
@@ -60,7 +58,8 @@ router.get('/getallusers', async (req, res) => {
 		return res.status(400).json({ message: 'only admin can get all user info' });
 	try {
 		let results = await query(`select * from user where isactive='true'`);
-		if (results.length == 0) { return res.status(400).json({ message: 'no users found' }); return; }
+		if (results.length == 0) { return res.status(400).json({ message: 'no users found' }); }
+		let result;
 		for (result of results) delete result['password'];
 		return res.status(200).json({ users: results });
 	} catch (error) {
@@ -72,7 +71,7 @@ router.get('/readuserinfo/:username', async (req, res) => {
 	let { username } = req.params;
 	try {
 		let result = await query(`select * from user where username='${username}'`);
-		if (result.length == 0) { return res.status(400).json({ message: 'username not found' }); return; }
+		if (result.length == 0) { return res.status(400).json({ message: 'username not found' }); }
 		delete result[0]['password'];
 		return res.status(200).json({ userinfo: result });
 	} catch (error) {
@@ -101,8 +100,8 @@ router.post('/changesubjectshandledinfo', async (req, res) => {
 	let { faculty, coursecodes } = req.body;
 	try {
 		await query(`DELETE FROM subjects_handled WHERE faculty='${faculty}';`);
-		for (let index = 0; index < coursecodes.length; index++) {
-			await query(`INSERT INTO subjects_handled VALUES('${faculty}','${coursecodes[index]}');`);
+		for (const coursecode of coursecodes) {
+			await query(`INSERT INTO subjects_handled VALUES('${faculty}','${coursecode}');`);
 		}
 		return res.status(200).json({ message: 'subjects_handled info updated successfully!' });
 	} catch (error) {
@@ -115,7 +114,7 @@ router.get('/readsubjectshandledinfo/:username', async (req, res) => {
 	let { username } = req.params;
 	try {
 		let result = await query(`select coursecode from subjects_handled where faculty='${username}'`);
-		if (result.length == 0) { return res.status(400).json({ message: 'username not found' }); return; }
+		if (result.length == 0) { return res.status(400).json({ message: 'username not found' }); }
 		return res.status(200).json({ subjects_handledinfo: result });
 	} catch (error) {
 		return res.status(500).json({ message: error });

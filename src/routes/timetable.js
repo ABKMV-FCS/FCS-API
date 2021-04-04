@@ -53,7 +53,7 @@ router.post('/examtimetabledownload', async (req, res) => {
 router.get('/readdept', async (req, res) => {
   try {
     let result = await query(`select * from dep_duration;`);
-    if (result.length == 0) { return res.status(400).json({ message: 'depts not found' }); return; }
+    if (result.length == 0) { return res.status(400).json({ message: 'depts not found' }); }
     return res.status(200).json({ departments: result, message: 'retrieval successful' });
   } catch (error) {
     return res.status(500).json({ message: error });
@@ -81,7 +81,7 @@ router.post('/deletedept', async (req, res) => {
   let { dept } = req.body;
   try {
     let result = await query(`select * from dep_duration where dept like '${dept}';`);
-    if (result.length == 0) { return res.status(400).json({ message: 'dept not found' }); return; }
+    if (result.length == 0) { return res.status(400).json({ message: 'dept not found' });}
     await query(`delete from dep_duration where dept like '${dept}';`);
     return res.status(200).json({ message: 'deletion successful' });
   } catch (error) {
@@ -92,7 +92,7 @@ router.post('/deletedept', async (req, res) => {
 router.get('/getactivesem', async (req, res) => {
   try {
     let result = await query(`select * from active_sem;`);
-    if (result.length == 0) { return res.status(400).json({ message: 'active semester not found' }); return; }
+    if (result.length == 0) { return res.status(400).json({ message: 'active semester not found' });}
     return res.status(200).json({ odd: result[0].odd, message: 'retrieval successful' });
   } catch (error) {
     return res.status(500).json({ message: error });
@@ -103,7 +103,7 @@ router.get('/readclassesunderdept/:dept', async (req, res) => {
   let { dept } = req.params
   try {
     let result = await query(`select section from dept_class where dept like '${dept}';`);
-    if (result.length == 0) { return res.status(400).json({ message: 'depts not found' }); return; }
+    if (result.length == 0) { return res.status(400).json({ message: 'depts not found' }); }
     return res.status(200).json({ sections: result, message: 'retrieval successful' });
   } catch (error) {
     return res.status(500).json({ message: error });
@@ -133,7 +133,7 @@ router.post('/deleteclassesunderdept', async (req, res) => {
   let { dept, section } = req.body;
   try {
     let result = await query(`select * from dept_class where dept like '${dept}' and section like '${section}';`);
-    if (result.length == 0) { return res.status(400).json({ message: 'section not found' }); return; }
+    if (result.length == 0) { return res.status(400).json({ message: 'section not found' }); }
     await query(`delete from dept_class where dept like '${dept}' and section like '${section}';`);
     return res.status(200).json({ message: 'deletion successful' });
   } catch (error) {
@@ -172,7 +172,7 @@ router.post('/deletecourse', async (req, res) => {
   let { coursecode } = req.body;
   try {
     let result = await query(`select * from course where coursecode like '${coursecode}';`);
-    if (result.length == 0) { return res.status(400).json({ message: 'course not found' }); return; }
+    if (result.length == 0) { return res.status(400).json({ message: 'course not found' }); }
     await query(`delete from sem_course where coursecode like '${coursecode}';`);
     await query(`delete from course where coursecode like '${coursecode}';`);
     return res.status(200).json({ message: 'deletion successful' });
