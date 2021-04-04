@@ -6,9 +6,9 @@ router.post('/fetchtimetable', async (req, res) => {
   let { dept, sem, section } = req.body;
   try {
     let result = await query(`select * from active_sem`);
-    let { odd, academic_year } = result[0]
+    let { odd, academic_year } = result[0];
     let coursecodes = await query(`select coursecode from sem_course where dept='${dept}'	and sem ='${sem}' ;`);
-    let faculties = {}
+    let faculties = {};
     for (let index = 0; index < coursecodes.length; index++) {
       // let temp = await query(`select faculty from faculty_subject where section='${section}' and dept='${dept}'	and sem ='${sem}' and	academic_year='${academic_year}' and coursecode='${coursecodes[index]["coursecode"]}';`)
       let temp = await query(`select faculty from subjects_handled where coursecode like '${coursecodes[index].coursecode}'`);
@@ -33,7 +33,7 @@ router.post('/fetchtimetable', async (req, res) => {
         }
         free[temp[index1]["faculty"]] = free_slots;
       }
-      faculties[coursecodes[index]["coursecode"]] = free
+      faculties[coursecodes[index]["coursecode"]] = free;
     }
     let faculty_sub = await query(`select faculty, coursecode from faculty_subject where dept = '${dept}' and sem='${sem}' and section='${section}' and academic_year = '${academic_year}'`);
     let timetable = await query(`select * from timetable where dept = '${dept}' and sem='${sem}' and section='${section}' and academic_year = '${academic_year}'`);
@@ -55,7 +55,7 @@ router.post('/fetchtimetable', async (req, res) => {
     return res.status(200).json({ message: 'Retrieval Successful!', faculties, faculty_sub, slotdata });
 
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({ message: error });
 
   }
@@ -101,11 +101,15 @@ router.post('/updatetimetable', async (req, res) => {
       }
     }
     for (const ent of faculty_subject) {
-      course_faculty[ent.coursecode] = ent.faculty
+      course_faculty[ent.coursecode] = ent.faculty;
+      let result = await query(`select count(*) as entry from subjects_handled where faculty like '${ent.faculty}' and coursecode like '${ent.coursecode}'`);
+      if (result.length === 0 || result[0].entry === 0) {
+        return res.status(400).json({ message: `faculty: ${ent.faculty} cannot handle coursecode: ${ent.coursecode}` });
+      }
     }
     for (let period of timetable) {
       if (course_faculty[period.coursecode] === undefined) {
-        return res.status(400).json({ message: `faculty for ${period.coursecode} is not found` })
+        return res.status(400).json({ message: `faculty for ${period.coursecode} is not found` });
       }
 
     //   let result = await query(`
@@ -128,11 +132,11 @@ router.post('/updatetimetable', async (req, res) => {
     }
     await query(`delete from timetable where section like '${section}' and dept like '${dept}' and sem=${sem} and academic_year=${academic_year};`); 
     for (const tt of timetable) {
-      await query(`replace into timetable values('${tt.slot}','${tt.day}','${tt.coursecode}','${tt.section}','${tt.dept}','${tt.sem}','${tt.academic_year}')`)
+      await query(`replace into timetable values('${tt.slot}','${tt.day}','${tt.coursecode}','${tt.section}','${tt.dept}','${tt.sem}','${tt.academic_year}')`);
     }
     return res.status(200).json({ message: "update successful, time table successfully changed" });
-  } catch(error) {
-    console.log(error)
+  } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: error });
   }
 

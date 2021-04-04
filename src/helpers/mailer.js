@@ -12,19 +12,20 @@ const emailTransporter = nodemailer.createTransport({
 });
 
 
-async function mailer(email,reset_link) {
+async function mailer(email, mailTxt, subject) {
 	try {
-		let mailTxt=`<b>Click the given link to login and reset your password<br><br></b><a href="${reset_link}">${reset_link}</a>`
-		await emailTransporter.sendMail({
+		let res=await emailTransporter.sendMail({
 			from: `"Faculty Calendar Scheduler - ABKMV" <${config.emailAuth.user}>`,
 			to: email,
-			subject: "ABKMV-Faculty Calendar Scheduler Password Recovery",
+			subject,
 			html: mailTxt
 		});
-		return true
+		// console.log(res);
+		return true;
 	} catch (error) {
-		return false
+		// console.log(error);
+		return false;
 	}
 }
 
-module.exports=mailer
+module.exports = mailer;

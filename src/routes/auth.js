@@ -7,13 +7,19 @@ const bcrypt = require('bcryptjs');
 const config = require('../../config.json');
 const mailer = require('../helpers/mailer');
 const { response } = require('express');
+var bouncer = require ("express-bouncer")(500, 900000);
+bouncer.whitelist.push ("127.0.0.1");
+bouncer.blocked = function (req, res, next, remaining)
+{
+    res.status(429).json({message: "Too many requests have been made, please wait " + remaining / 1000 + " seconds"});
+};
 
 let createJWT = (record, expiresIn) => {
 	let { username, email, role } = record;
 	return jwt.sign({ username, email, role }, config.jwt_secret, { expiresIn });
 };
 
-router.post('/login', async (req, res) => {
+router.post('/login',bouncer.block, async (req, res) => {
 	let { username, password } = req.body;
 	try {
 		let result = await query(`SELECT * FROM USER WHERE username LIKE '${username}'`);
@@ -33,7 +39,10 @@ router.post('/register', verifyJWT, async (req, res) => {
 	try {
 		password = bcrypt.hashSync(password, 12);
 		await query(`INSERT INTO USER VALUES('${username}','${password}','${email}','${role}','${phone}','${name}','true',${profilephoto},'${qualifications}')`);
-		res.status(200).json({ message: 'Registered Successfully!' });
+		let message='Registered Successfully!'
+		if(await mailer(email,`Successfully registered user:${username}`,'ABKMV-Faculty Calendar Scheduler account creation'))
+			message+=' Confirmation mail sent.'
+		res.status(200).json({ message });
 	} catch (error) {
 		if (error.code === 'ER_DUP_ENTRY') {
 			res.status(400).json({ message: 'username already taken' });
@@ -67,7 +76,10 @@ router.post('/forgotpassword', async (req, res) => {
 			return res.status(400).json({ message: 'Invalid username!' });
 		let token = createJWT(result[0], '24h');
 		let { email } = result[0];
-		if (mailer(email, `${config.hostname}/resetpassword?token=${token}`))
+		let reset_link=`${config.hostname}/resetpassword?token=${token}`
+		let mailTxt=`<b>Click the given link to login and reset your password<br><br></b><a href="${reset_link}">${reset_link}</a>`
+		let subject="ABKMV-Faculty Calendar Scheduler Password Recovery"
+		if (await mailer(email, mailTxt,subject))
 			return res.status(200).json({ message: 'Password reset instructions sent to mail' });
 		else
 			return res.status(500).json({ message: 'Error sending mail to corresponding username' });
