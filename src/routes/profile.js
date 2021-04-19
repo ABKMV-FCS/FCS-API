@@ -96,6 +96,18 @@ router.get('/getallusers', async (req, res) => {
 	}
 });
 
+router.get('/getallfaculties', async (req, res) => {
+	if (req.tokenDetails.role !== 'admin')
+		return res.status(400).json({ message: 'only admin can get all faculty info' });
+	try {
+		let results = await query(`select name as faculty from user where isactive='true' and role='faculty'`);
+		if (results.length == 0) { return res.status(400).json({ message: 'no faculties found' }); }
+		return res.status(200).json({ faculties: results });
+	} catch (error) {
+		return res.status(500).json({ message: error });
+	}
+});
+
 router.get('/readuserinfo/:username', async (req, res) => {
 	let { username } = req.params;
 	try {
@@ -143,7 +155,6 @@ router.get('/readsubjectshandledinfo/:username', async (req, res) => {
 	let { username } = req.params;
 	try {
 		let result = await query(`select coursecode from subjects_handled where faculty='${username}'`);
-		if (result.length == 0) { return res.status(400).json({ message: 'username not found' }); }
 		return res.status(200).json({ subjects_handledinfo: result });
 	} catch (error) {
 		return res.status(500).json({ message: error });
