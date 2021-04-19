@@ -19,7 +19,7 @@ let createJWT = (record, expiresIn) => {
 	return jwt.sign({ username, email, role }, config.jwt_secret, { expiresIn });
 };
 
-router.post('/login',bouncer.block, async (req, res) => {
+router.post('/login', async (req, res) => {
 	let { username, password } = req.body;
 	try {
 		let result = await query(`SELECT * FROM USER WHERE username LIKE '${username}'`);
@@ -38,7 +38,7 @@ router.post('/register', verifyJWT, async (req, res) => {
 	let { username, password, email, name, role, phone, qualifications, profilephoto } = req.body;
 	try {
 		password = bcrypt.hashSync(password, 12);
-		await query(`INSERT INTO USER VALUES('${username}','${password}','${email}','${role}','${phone}','${name}','true',${profilephoto},'${qualifications}')`);
+		await query(`INSERT INTO USER VALUES('${username}','${password}','${email}','${role}','${phone}','${name}','true','${profilephoto}','${qualifications}')`);
 		let message='Registered Successfully!'
 		if(await mailer(email,`Successfully registered user:${username}`,'ABKMV-Faculty Calendar Scheduler account creation'))
 			message+=' Confirmation mail sent.'

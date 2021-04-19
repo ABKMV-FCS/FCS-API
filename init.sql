@@ -182,10 +182,10 @@ create table sem_course(
 insert into course values('15CSE301','Database Management Systems');
 insert into course values('15CSE302','Theory of Computation');
 insert into course values('15CSE303','Computer Organisation and Architecture');
-insert into course values('14cse237','Embedded Systems');
-insert into course values('14cse235','Cloud Computing');
-insert into course values('14cse238','Operating Systems');
-insert into course values('14cse239','Compiler Design');
+insert into course values('14CSE237','Embedded Systems');
+insert into course values('14CSE235','Cloud Computing');
+insert into course values('14CSE238','Operating Systems');
+insert into course values('14CSE239','Compiler Design');
 
 insert into sem_course values('CSE','4','15CSE301');
 insert into sem_course values('CSE','4','15CSE302');
@@ -208,21 +208,23 @@ insert into dept_class values('MAT','C');
 insert into dept_class values('EEE','A');
 insert into dept_class values('EEE','B');
 
-insert into timetable values('1','THU','14cse235','c','cse','4','2018');
-insert into timetable values('2','THU','14cse237','c','cse','4','2018');
-insert into timetable values('3','THU','14cse238','c','cse','4','2018');
-insert into timetable values('4','THU','14cse239','c','cse','4','2018');
+insert into timetable values('1','THU','14CSE235','c','CSE','4','2018');
+insert into timetable values('2','THU','14CSE237','c','CSE','4','2018');
+insert into timetable values('3','THU','14CSE238','c','CSE','4','2018');
+insert into timetable values('4','THU','14CSE239','c','CSE','4','2018');
 
 	
 insert into faculty_subject values('admin1','15CSE301','C','CSE','4','2018');
 insert into faculty_subject values('admin1','15CSE302','C','CSE','4','2018');
-insert into faculty_subject values('admin1','14cse235','C','CSE','4','2018');
-insert into faculty_subject values('admin1','14cse237','C','CSE','4','2018');
-insert into faculty_subject values('admin1','14cse238','C','CSE','4','2018');
-insert into faculty_subject values('admin1','14cse239','C','CSE','4','2018');
+insert into faculty_subject values('admin1','14CSE235','C','CSE','4','2018');
+insert into faculty_subject values('admin1','14CSE237','C','CSE','4','2018');
+insert into faculty_subject values('admin1','14CSE238','C','CSE','4','2018');
+insert into faculty_subject values('admin1','14CSE239','C','CSE','4','2018');
 
 insert into active_sem values('0','2018');
 
 insert into exam_slot values('2021-04-05','1','15CSE301','4','CSE','admin','p1','2018');
 insert into exam_slot values('2021-04-04','2','15CSE302','4','CSE','admin','p1','2018');
 insert into exam_slot values('2021-04-03','3','15CSE303','4','CSE','admin','p1','2018');
+
+insert into subjects_handled values('user','14CSE301');
