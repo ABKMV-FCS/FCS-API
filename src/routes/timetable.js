@@ -120,7 +120,7 @@ router.get('/readclassesunderdept/:dept', async (req, res) => {
   let { dept } = req.params
   try {
     let result = await query(`select section from dept_class where dept like '${dept}';`);
-    if (result.length == 0) { return res.status(400).json({ message: 'depts not found' }); }
+    if (result.length == 0) { return res.status(400).json({ message: 'sections not found' }); }
     return res.status(200).json({ sections: result, message: 'retrieval successful' });
   } catch (error) {
     return res.status(500).json({ message: error });

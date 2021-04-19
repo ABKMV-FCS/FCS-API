@@ -40,7 +40,6 @@ describe('Login as admin, Download Student Timetable, read faculty, Download Fac
         let { faculty }  = timetable_config.studenttimetabledownload;
         chai.request(test_config.baseURL).post('/timetable/facultytimetabledownload').set('Authorization', `Bearer ${admin_token}`).send({ faculty }).end((err, res) => {
             res.should.have.status(200);
-            res.body.should.have.property('timetable');
             done();
         });
     });
