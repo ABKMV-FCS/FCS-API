@@ -3,8 +3,10 @@ const router = express.Router();
 const { query } = require('../db');
 
 router.post('/studenttimetabledownload', async (req, res) => {
-  let { dept, section, sem, academic_year } = req.body;
+  let { dept, section, sem } = req.body;
   try {
+    let asm = await query(`select * from active_sem`);
+    let { academic_year } = asm[0];
     let result = await query(`SELECT slot, day, coursecode from Timetable WHERE section = '${section}' and sem = '${sem}' and dept = '${dept}' and academic_year = '${academic_year}' `);
     if (result.length == 0) { return res.status(200).json({ message: 'no data available' }); }
     let coursename;
@@ -18,14 +20,26 @@ router.post('/studenttimetabledownload', async (req, res) => {
   }
 });
 
-router.post('/facultytimetabledownload', async (req, res) => {
-  let { academic_year, faculty, odd } = req.body;
+router.get('/readfaculty', async (req, res) => {
   try {
+    let result = await query(`select DISTINCT faculty from subjects_handled;`);
+    if (result.length == 0) { return res.status(400).json({ message: 'faculties not found' }); }
+    return res.status(200).json({ faculties: result, message: 'retrieval successful' });
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
+
+router.post('/facultytimetabledownload', async (req, res) => {
+  let { faculty } = req.body;
+  try {
+    let asm = await query(`select * from active_sem`);
+    let { odd, academic_year } = asm[0];
     let result = await query(`
     select tt.day, tt.slot, tt.coursecode, tt.section, tt.dept, tt.sem from (faculty_subject fs inner join timetable tt on fs.coursecode = tt.coursecode and fs.section = tt.section and fs.sem = tt.sem and fs.academic_year = tt.academic_year) where fs.academic_year = '${academic_year}' and fs.faculty = '${faculty}' and MOD(fs.sem, 2) = '${odd === 'odd' ? 1 : 0}'; `);
     let coursename;
     for (const r2 of result) {
-      coursename = await query(`SELECT name from course WHERE code = '${r2.coursecode}'`);
+      coursename = await query(`SELECT name from course WHERE coursecode = '${r2.coursecode}'`);
       r2["coursename"] = coursename[0].name;
     }
     return res.status(200).json({ timetable: result, message: 'retrieval successful' });
