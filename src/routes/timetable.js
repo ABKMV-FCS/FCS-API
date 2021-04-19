@@ -22,6 +22,7 @@ router.post('/studenttimetabledownload', async (req, res) => {
 
 router.get('/readfaculty', async (req, res) => {
   try {
+    console.log("hello");
     let result = await query(`select DISTINCT faculty from subjects_handled;`);
     if (result.length == 0) { return res.status(400).json({ message: 'faculties not found' }); }
     return res.status(200).json({ faculties: result, message: 'retrieval successful' });

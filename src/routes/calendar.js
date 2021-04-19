@@ -105,12 +105,14 @@ router.post('/updatetimetable', async (req, res) => {
         course_faculty[ent.coursecode] = ent.faculty;
         let result = await query(`select count(*) as entry from subjects_handled where faculty like '${ent.faculty}' and coursecode like '${ent.coursecode}'`);
         if (result.length === 0 || result[0].entry === 0) {
+          console.log(`faculty: ${ent.faculty} cannot handle coursecode: ${ent.coursecode}`);
           return res.status(400).json({ message: `faculty: ${ent.faculty} cannot handle coursecode: ${ent.coursecode}` });
         }
       }
     }
     for (let period of timetable) {
       if (course_faculty[period.coursecode] === undefined) {
+        console.log(`faculty for ${period.coursecode} is not found`);
         return res.status(400).json({ message: `faculty for ${period.coursecode} is not found` });
       }
 
