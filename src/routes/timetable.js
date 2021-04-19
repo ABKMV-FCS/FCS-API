@@ -50,8 +50,10 @@ router.post('/facultytimetabledownload', async (req, res) => {
 });
 
 router.post('/examtimetabledownload', async (req, res) => {
-  let { dept, type, sem, academic_year } = req.body;
+  let { dept, type, sem } = req.body;
   try {
+    let asm = await query(`select * from active_sem`);
+    let { academic_year } = asm[0];
     let result = await query(`SELECT date, exam_slot, faculty, coursecode from exam_slot WHERE type = '${type}' and sem = '${sem}' and dept = '${dept}' and academic_year = '${academic_year}' `);
     let coursename;
     for (const r3 of result) {

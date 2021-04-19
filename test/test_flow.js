@@ -1,4 +1,4 @@
-// require('../src/app')
+require('../src/app')
 require('./auth/auth_test')
 require('./profile/profile_test')
 require('./calendar/calendar_test')
