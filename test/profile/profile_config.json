@@ -5,16 +5,30 @@
 		"email": "user1@user1.com",
 		"role": "faculty"
 	},
-	"profilechangerequest":{
+	"profilechangerequest": {
 		"username": "user1",
-    "password": "user1_password",
-    "email": "user1@user1.com",
-    "role": "faculty",
-    "phone": "9876543211",
-    "name": "user1",
-    "isactive": "1",
-    "profilephoto": "poiuytrewsqlkjhgfdsamnbvcxz",
-    "qualifications": "qwertyuiop"
+		"password": "user1_password",
+		"email": "user1@user1.com",
+		"role": "faculty",
+		"phone": "9876543211",
+		"name": "user1",
+		"isactive": "1",
+		"profilephoto": "poiuytrewsqlkjhgfdsamnbvcxz",
+		"qualifications": "qwertyuiop"
+	},
+	"changeuserinfo": {
+		"oldusername": "user1",
+		"username": "user1",
+		"profilephoto": "poiuytrewsqlkjhgfdsamnbvcxz",
+		"qualifications": "qwertyuiop",
+		"phone": "9876543211",
+		"name": "user",
+		"email": "user1@user1.com"
+	},
+	"changesubjectshandledinfo":{
+		"faculty":"user1", "coursecodes":["15CSE352","15CSE357"]
+	},
+	"deleteprofile":{
+		"faculty":"user1", "datetime":""
 	}
-
-} 
+}

@@ -24,6 +24,7 @@ describe('login as admin, register faculty, login as faculty,stay signed in,forg
     
     it('Register faculty', (done) => {
         chai.request(test_config.baseURL).post('/auth/register').set('Authorization', `Bearer ${admin_token}`).send(auth_config.register).end((err, res) => {
+            console.log(res.body.message);
             res.should.have.status(200);
             done();
         });
@@ -47,17 +48,12 @@ describe('login as admin, register faculty, login as faculty,stay signed in,forg
     it('Forgot Password', (done) => {
         let { username } = auth_config.register;
         chai.request(test_config.baseURL).post('/auth/forgotpassword').send({ username }).end((err, res) => {
+            console.log(res.body);
             res.should.have.status(200);
             res.body.should.have.property('message');
             done();
         });
     });
 
-    // it('ForceRemove faculty', (done) => {
-    //     let { username } = auth_config.register;
-    //     chai.request(test_config.baseURL).post('/auth/forceremoveuser').set('Authorization', `Bearer ${admin_token}`).send({ username }).end((err, res) => {
-    //         res.should.have.status(200);
-    //         done();
-    //     });
-    // });
+    
 });

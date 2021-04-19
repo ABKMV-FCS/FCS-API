@@ -11,7 +11,7 @@ router.post('/studenttimetabledownload', async (req, res) => {
     if (result.length == 0) { return res.status(200).json({ message: 'no data available' }); }
     let coursename;
     for (const r1 of result) {
-      coursename = await query(`SELECT name from course WHERE code = '${r1.coursecode}'`);
+      coursename = await query(`SELECT name from coursecode WHERE code = '${r1.coursecode}'`);
       r1["coursename"] = coursename[0].name;
     }
     return res.status(200).json({ timetable: result, message: 'retrieval successful' });
