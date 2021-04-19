@@ -3,15 +3,15 @@ const router = express.Router();
 const { query } = require('../db');
 
 router.post('/studenttimetabledownload', async (req, res) => {
-  let { dept, section, sem } = req.body;
+  let { dept, sec, sem } = req.body;
   try {
     let asm = await query(`select * from active_sem`);
     let { academic_year } = asm[0];
-    let result = await query(`SELECT slot, day, coursecode from Timetable WHERE section = '${section}' and sem = '${sem}' and dept = '${dept}' and academic_year = '${academic_year}' `);
+    let result = await query(`SELECT slot, day, coursecode from Timetable WHERE section = '${sec}' and sem = '${sem}' and dept = '${dept}' and academic_year = '${academic_year}' `);
     if (result.length == 0) { return res.status(200).json({ message: 'no data available' }); }
     let coursename;
     for (const r1 of result) {
-      coursename = await query(`SELECT name from course WHERE code = '${r1.coursecode}'`);
+      coursename = await query(`SELECT name from course WHERE coursecode = '${r1.coursecode}'`);
       r1["coursename"] = coursename[0].name;
     }
     return res.status(200).json({ timetable: result, message: 'retrieval successful' });
