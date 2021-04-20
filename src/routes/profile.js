@@ -164,22 +164,6 @@ router.get('/readsubjectshandledinfo/:username', async (req, res) => {
 	}
 });
 
-// router.post('/deleteprofile', async (req, res) => {
-// 	let { faculty, datetime } = req.body;
-// 	try {
-// 		datetime = moment(new Date(datetime)).utc(true).format('yyyy-MM-DD');
-// 		let examslots = await query(`select * from exam_slot where faculty='${faculty}' and date>='${datetime}'`);
-// 		let facultysubjects = await query(`select * from faculty_subject where faculty LIKE '${faculty}'`);
-// 		if (facultysubjects.length == 0 && examslots.length == 0) {
-// 			await query(`UPDATE USER SET isactive = 'False' WHERE username='${faculty}';`);
-// 			return res.status(200).json({ message: 'profile deletion successful!' });
-// 		} else {
-// 			return res.status(200).json({ message: 'dependencies found! do change the details before deletion.', dependencies: { facultysubjects, examslots } });
-// 		}
-// 	} catch (error) {
-// 		console.log(error);
-// 		return res.status(500).json({ message: error });
-// 	}
-// });
+
 
 module.exports = router;

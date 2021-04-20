@@ -29,8 +29,7 @@ describe('Login as admin, Download Student Timetable, read faculty, Download Fac
     });
     it('read faculty', (done) => {
         chai.request(test_config.baseURL).get('/timetable/readfaculty').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            // console.log(res);
-            // res.should.have.status(200);
+            
             expect(res.status).to.be.oneOf([200, 400]);
             done();
         });
@@ -44,16 +43,14 @@ describe('Login as admin, Download Student Timetable, read faculty, Download Fac
     });
     it('read dept', (done) => {
         chai.request(test_config.baseURL).get('/timetable/readdept').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            // console.log(res);
-            // res.should.have.status(200);
+            
             expect(res.status).to.be.oneOf([200, 400]);
             done();
         });
     });
     it('get active sem', (done) => {
         chai.request(test_config.baseURL).get('/timetable/getactivesem').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            // console.log(res);
-            // res.should.have.status(200);
+            
             expect(res.status).to.be.oneOf([200, 400]);
             done();
         });
@@ -61,16 +58,14 @@ describe('Login as admin, Download Student Timetable, read faculty, Download Fac
     it('read classes under dept', (done) => {
         let {dept} = timetable_config.readclassesunderdept
         chai.request(test_config.baseURL).get('/timetable/readclassesunderdept/'+dept).set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            // console.log(res);
-            // res.should.have.status(200);
+            
             expect(res.status).to.be.oneOf([200, 400]);
             done();
         });
     });
     it('read courses', (done) => {
          chai.request(test_config.baseURL).get('/timetable/readcourses/').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            // console.log(res);
-            // res.should.have.status(200);
+            
             expect(res.status).to.be.oneOf([200, 400]);
             done();
         });
@@ -78,8 +73,7 @@ describe('Login as admin, Download Student Timetable, read faculty, Download Fac
     it('get course list under sem', (done) => {
         let { dept,sem } = timetable_config.getcourselistundersem
         chai.request(test_config.baseURL).post('/timetable/getcourselistundersem/').set('Authorization', `Bearer ${admin_token}`).send({ dept,sem }).end((err, res) => {
-            // console.log(res);
-            // res.should.have.status(200);
+            
             expect(res.status).to.be.oneOf([200, 400]);
             done();
         });
