@@ -22,6 +22,7 @@ router.post('/studenttimetabledownload', async (req, res) => {
 
 router.get('/readfaculty', async (req, res) => {
   try {
+    console.log("hello");
     let result = await query(`select DISTINCT faculty from subjects_handled;`);
     if (result.length == 0) { return res.status(400).json({ message: 'faculties not found' }); }
     return res.status(200).json({ faculties: result, message: 'retrieval successful' });
@@ -49,8 +50,10 @@ router.post('/facultytimetabledownload', async (req, res) => {
 });
 
 router.post('/examtimetabledownload', async (req, res) => {
-  let { dept, type, sem, academic_year } = req.body;
+  let { dept, type, sem } = req.body;
   try {
+    let asm = await query(`select * from active_sem`);
+    let { academic_year } = asm[0];
     let result = await query(`SELECT date, exam_slot, faculty, coursecode from exam_slot WHERE type = '${type}' and sem = '${sem}' and dept = '${dept}' and academic_year = '${academic_year}' `);
     let coursename;
     for (const r3 of result) {
@@ -117,7 +120,7 @@ router.get('/readclassesunderdept/:dept', async (req, res) => {
   let { dept } = req.params
   try {
     let result = await query(`select section from dept_class where dept like '${dept}';`);
-    if (result.length == 0) { return res.status(400).json({ message: 'depts not found' }); }
+    if (result.length == 0) { return res.status(400).json({ message: 'sections not found' }); }
     return res.status(200).json({ sections: result, message: 'retrieval successful' });
   } catch (error) {
     return res.status(500).json({ message: error });

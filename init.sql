@@ -228,3 +228,16 @@ insert into exam_slot values('2021-04-04','2','15CSE302','4','CSE','admin','p1',
 insert into exam_slot values('2021-04-03','3','15CSE303','4','CSE','admin','p1','2018');
 
 insert into subjects_handled values('user','14CSE301');
+insert into subjects_handled values('admin','14cse235');
+insert into subjects_handled values('admin','14cse237');
+insert into subjects_handled values('admin','14cse238');
+insert into subjects_handled values('admin','14cse239');
+insert into subjects_handled values('admin','15CSE301');
+insert into subjects_handled values('admin','15CSE302');
+insert into subjects_handled values('admin1','14cse235');
+insert into subjects_handled values('admin1','14cse237');
+insert into subjects_handled values('admin1','14cse238');
+insert into subjects_handled values('admin1','14cse239');
+insert into subjects_handled values('admin1','15CSE301');
+insert into subjects_handled values('admin1','15CSE302');
+insert into subjects_handled values('user','14CSE301');

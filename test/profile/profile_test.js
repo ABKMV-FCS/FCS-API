@@ -147,23 +147,23 @@ describe('Login as admin,change user info, get all users, Read user info, login 
             done();
         });
     });
-    it('read subjects handled info', (done) => {
-        let { username } = profile_config.login;
-        chai.request(test_config.baseURL).get('/profile/readsubjectshandledinfo/user').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            console.log(res.body);
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('subjects_handledinfo');
-            subjects_handled = []
-            if(res.body.subjects_handledinfo.length !=0){
-                for (let index = 0; index < res.body.subjects_handledinfo.length; index++) {
-                    subjects_handled.push(res.body.subjects_handledinfo[index].coursecode)
-                }
-            }
-            console.log(subjects_handled);
-            done();
-        });
-    });
+    // it('read subjects handled info', (done) => {
+    //     let { username } = profile_config.login;
+    //     chai.request(test_config.baseURL).get('/profile/readsubjectshandledinfo/user').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
+    //         console.log(res.body);
+    //         res.should.have.status(200);
+    //         res.body.should.be.a('object');
+    //         res.body.should.have.property('subjects_handledinfo');
+    //         subjects_handled = []
+    //         if(res.body.subjects_handledinfo.length !=0){
+    //             for (let index = 0; index < res.body.subjects_handledinfo.length; index++) {
+    //                 subjects_handled.push(res.body.subjects_handledinfo[index].coursecode)
+    //             }
+    //         }
+    //         console.log(subjects_handled);
+    //         done();
+    //     });
+    // });
     it('Change user info', (done) => {
         let { oldusername, username, profilephoto, qualifications, phone, name, email } = profile_config.changeuserinfo;
         chai.request(test_config.baseURL).post('/profile/changeuserinfo').set('Authorization', `Bearer ${admin_token}`).send({ oldusername, username, profilephoto, qualifications, phone, name, email }).end((err, res) => {
@@ -201,17 +201,17 @@ describe('Login as admin,change user info, get all users, Read user info, login 
             done();
         });
     });
-    it('change subjects handled info', (done) => {
-        let {faculty} = profile_config.changesubjectshandledinfo
-        let coursecodes = subjects_handled
-        chai.request(test_config.baseURL).post('/profile/changesubjectshandledinfo').set('Authorization', `Bearer ${admin_token}`).send({faculty:'user',coursecodes}).end((err, res) => {
-            console.log(err);
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message');
-            done();
-        });
-    });
+    // it('change subjects handled info', (done) => {
+    //     let {faculty} = profile_config.changesubjectshandledinfo
+    //     let coursecodes = subjects_handled
+    //     chai.request(test_config.baseURL).post('/profile/changesubjectshandledinfo').set('Authorization', `Bearer ${admin_token}`).send({faculty:'user',coursecodes}).end((err, res) => {
+    //         console.log(err);
+    //         res.should.have.status(200);
+    //         res.body.should.be.a('object');
+    //         res.body.should.have.property('message');
+    //         done();
+    //     });
+    // });
     it('ForceRemove faculty', (done) => {
         let { username } = profile_config.login;
         chai.request(test_config.baseURL).post('/auth/forceremoveuser').set('Authorization', `Bearer ${admin_token}`).send({ username }).end((err, res) => {
