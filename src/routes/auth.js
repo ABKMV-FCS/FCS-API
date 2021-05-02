@@ -7,11 +7,18 @@ const bcrypt = require('bcryptjs');
 const config = require('../../config.json');
 const mailer = require('../helpers/mailer');
 const { response } = require('express');
-var bouncer = require ("express-bouncer")(500, 900000);
-bouncer.whitelist.push ("127.0.0.1");
-bouncer.blocked = function (req, res, next, remaining)
-{
-    res.status(429).json({message: "Too many requests have been made, please wait " + remaining / 1000 + " seconds"});
+var admin = require("firebase-admin");
+
+var serviceAccount = require("../../firebasecreds/facultycalendarscheduler-firebase-adminsdk-s1kqm-24a6ba3f82.json");
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount)
+});
+
+var bouncer = require("express-bouncer")(500, 900000);
+bouncer.whitelist.push("127.0.0.1");
+bouncer.blocked = function (req, res, next, remaining) {
+	res.status(429).json({ message: "Too many requests have been made, please wait " + remaining / 1000 + " seconds" });
 };
 
 let createJWT = (record, expiresIn) => {
@@ -26,9 +33,31 @@ router.post('/login', async (req, res) => {
 		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
 		if (!bcrypt.compareSync(password, result[0].password)) { return res.status(400).json({ message: 'username/password incorrect' }); }
 		let token = createJWT(result[0], '24h');
-		res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: 24*60 });
+		res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: 24 * 60 });
 	} catch (error) {
 		res.status(500).json({ message: error });
+	}
+});
+router.post('/googlelogin', async (req, res) => {
+	let { idToken } = req.body;
+	try {
+		let email=''
+		try {
+			let decodedToken = await admin
+				.auth()
+				.verifyIdToken(idToken.i);
+				email=decodedToken.email;
+				if(!decodedToken.email_verified) throw Error()
+			} catch (error) {
+				throw Error('Invalid gmail login')
+			}
+		let result = await query(`SELECT * FROM USER WHERE email LIKE '${email}'`);
+
+		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
+		let token = createJWT(result[0], '24h');
+		res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: 24 * 60 });
+	} catch (error) {
+		res.status(500).json({ message: error.message });
 	}
 });
 
@@ -39,9 +68,9 @@ router.post('/register', verifyJWT, async (req, res) => {
 	try {
 		password = bcrypt.hashSync(password, 12);
 		await query(`INSERT INTO USER VALUES('${username}','${password}','${email}','${role}','${phone}','${name}','true','${profilephoto}','${qualifications}')`);
-		let message='Registered Successfully!'
-		if(await mailer(email,`Successfully registered user:${username}`,'ABKMV-Faculty Calendar Scheduler account creation'))
-			message+=' Confirmation mail sent.'
+		let message = 'Registered Successfully!';
+		if (await mailer(email, `Successfully registered user:${username}`, 'ABKMV-Faculty Calendar Scheduler account creation'))
+			message += ' Confirmation mail sent.';
 		res.status(200).json({ message });
 	} catch (error) {
 		if (error.code === 'ER_DUP_ENTRY') {
@@ -76,10 +105,10 @@ router.post('/forgotpassword', async (req, res) => {
 			return res.status(400).json({ message: 'Invalid username!' });
 		let token = createJWT(result[0], '24h');
 		let { email } = result[0];
-		let reset_link=`${config.hostname}/resetpassword?token=${token}`
-		let mailTxt=`<b>Click the given link to login and reset your password<br><br></b><a href="${reset_link}">${reset_link}</a>`
-		let subject="ABKMV-Faculty Calendar Scheduler Password Recovery"
-		if (await mailer(email, mailTxt,subject))
+		let reset_link = `${config.hostname}/resetpassword?token=${token}`;
+		let mailTxt = `<b>Click the given link to login and reset your password<br><br></b><a href="${reset_link}">${reset_link}</a>`;
+		let subject = "ABKMV-Faculty Calendar Scheduler Password Recovery";
+		if (await mailer(email, mailTxt, subject))
 			return res.status(200).json({ message: 'Password reset instructions sent to mail' });
 		else
 			return res.status(500).json({ message: 'Error sending mail to corresponding username' });

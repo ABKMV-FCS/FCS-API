@@ -32,7 +32,7 @@ describe('login as faculty, read profile details, change profile request, login 
             done();
         });
     });
-    
+
     it('Change profile request', (done) => {
         let { username } = profile_config.login;
         chai.request(test_config.baseURL).post('/profile/requestprofilechange/').set('Authorization', `Bearer ${user_token}`).send({ username }).end((err, res) => {
@@ -42,7 +42,7 @@ describe('login as faculty, read profile details, change profile request, login 
             done();
         });
     });
-    
+
     it('Login as admin', (done) => {
         let { username, password } = config.admins[0];
         chai.request(test_config.baseURL).post('/auth/login').send({ username, password }).end((err, res) => {
@@ -64,7 +64,6 @@ describe('login as faculty, read profile details, change profile request, login 
         let { username } = profile_config.login;
         let faculty = username
         chai.request(test_config.baseURL).post('/profile/acceptprofilechangerequest').set('Authorization', `Bearer ${admin_token}`).send({faculty}).end((err, res) => {
-            console.log(res.body);
             res.should.have.status(200);
             res.body.should.be.a('object');
             res.body.should.have.property('message');
@@ -95,7 +94,7 @@ describe('login as faculty, read profile details, change profile request, login 
             done();
         });
     });
-    
+
     it('Change profile request', (done) => {
         let { username } = profile_config.login;
         chai.request(test_config.baseURL).post('/profile/requestprofilechange/').set('Authorization', `Bearer ${user_token}`).send({ username }).end((err, res) => {
@@ -105,7 +104,7 @@ describe('login as faculty, read profile details, change profile request, login 
             done();
         });
     });
-    
+
     it('Login as admin', (done) => {
         let { username, password } = config.admins[0];
         chai.request(test_config.baseURL).post('/auth/login').send({ username, password }).end((err, res) => {
@@ -127,7 +126,7 @@ describe('login as faculty, read profile details, change profile request, login 
         let { username } = profile_config.login;
         let faculty = username
         chai.request(test_config.baseURL).post('/profile/rejectprofilechangerequest').set('Authorization', `Bearer ${admin_token}`).send({faculty}).end((err, res) => {
-            console.log(res.body);
+
             res.should.have.status(200);
             res.body.should.be.a('object');
             res.body.should.have.property('message');
@@ -136,7 +135,7 @@ describe('login as faculty, read profile details, change profile request, login 
     });
 });
 describe('Login as admin,change user info, get all users, Read user info, login as admin, show profile change requests, reject profile change, ', () => {
-    
+
     it('Login as admin', (done) => {
         let { username, password } = config.admins[0];
         chai.request(test_config.baseURL).post('/auth/login').send({ username, password }).end((err, res) => {
@@ -182,7 +181,7 @@ describe('Login as admin,change user info, get all users, Read user info, login 
             done();
         });
     });
-    
+
     it('Read user info', (done) => {
         let { username } = profile_config.login;
         chai.request(test_config.baseURL).get(`/profile/readuserinfo/`+username).set('Authorization', `Bearer ${user_token}`).end((err, res) => {
@@ -192,7 +191,7 @@ describe('Login as admin,change user info, get all users, Read user info, login 
             done();
         });
     });
-    
+
     it('init profile change details', (done) => {
         chai.request(test_config.baseURL).get('/profile/initprofilechangedetails').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
             res.should.have.status(200);
