@@ -55,6 +55,7 @@ router.post('/googlelogin', async (req, res) => {
 				email=decodedToken.email;
 				if(!decodedToken.email_verified) throw Error()
 			} catch (error) {
+				console.log(error);
 				throw Error('Invalid gmail login')
 			}
 		let result = await query(`SELECT * FROM USER WHERE email LIKE '${email}'`);
