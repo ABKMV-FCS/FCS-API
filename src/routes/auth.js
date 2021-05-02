@@ -27,19 +27,25 @@ let createJWT = (record, expiresIn) => {
 };
 
 router.post('/login', async (req, res) => {
-	let { username, password } = req.body;
+	let { username, password, staysignedin } = req.body;
 	try {
 		let result = await query(`SELECT * FROM USER WHERE username LIKE '${username}'`);
 		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
 		if (!bcrypt.compareSync(password, result[0].password)) { return res.status(400).json({ message: 'username/password incorrect' }); }
-		let token = createJWT(result[0], '24h');
-		res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: 24 * 60 });
+		if(!staysignedin) {
+			let token = createJWT(result[0], '24h');
+			res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: 24*60 });
+		}
+		else {
+			let token = createJWT(result[0], '365d');
+			res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: -1 });
+		}
 	} catch (error) {
 		res.status(500).json({ message: error });
 	}
 });
 router.post('/googlelogin', async (req, res) => {
-	let { idToken } = req.body;
+	let { idToken,staysignedin } = req.body;
 	try {
 		let email=''
 		try {
@@ -54,8 +60,14 @@ router.post('/googlelogin', async (req, res) => {
 		let result = await query(`SELECT * FROM USER WHERE email LIKE '${email}'`);
 
 		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
-		let token = createJWT(result[0], '24h');
-		res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: 24 * 60 });
+		if(!staysignedin) {
+			let token = createJWT(result[0], '24h');
+			res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: 24*60 });
+		}
+		else {
+			let token = createJWT(result[0], '365d');
+			res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: -1 });
+		}
 	} catch (error) {
 		res.status(500).json({ message: error.message });
 	}
@@ -93,10 +105,6 @@ router.post('/forceremoveuser', verifyJWT, async (req, res) => {
 	}
 });
 
-router.post('/staysignedin', verifyJWT, async (req, res) => {
-	res.status(200).json({ token: createJWT(req.tokenDetails, '365d') });
-});
-
 router.post('/forgotpassword', async (req, res) => {
 	let { username } = req.body;
 	try {
@@ -114,6 +122,35 @@ router.post('/forgotpassword', async (req, res) => {
 			return res.status(500).json({ message: 'Error sending mail to corresponding username' });
 	} catch (error) {
 		return res.status(500).json({ message: error });
+	}
+});
+
+router.post('/check-jwt', async (req, res) => {
+	let { token } = req.body;
+	try {
+		jwt.verify(token, config.jwt_secret, (err, tokenDetails) => {
+            if (err) {
+                return res.status(403).json({message:'Unauthorized'});
+            }
+            req.tokenDetails = tokenDetails;
+        });
+		let result = await query(`SELECT * FROM USER WHERE username LIKE '${req.tokenDetails.username}'`);
+		if (result.length == 0) { res.status(400).json({ message: 'Token username not found' }); return; }
+		res.status(200).json({ username: result[0].username,name: result[0].name, role: result[0].role, message: 'Token Valid!', expiration: 24*60 });
+	} catch (error) {
+		res.status(500).json({ message: error });
+	}
+});
+
+router.post('/resetpassword', verifyJWT, async (req, res) => {
+	let { password } = req.body;
+	try {
+		let result = await query(`SELECT * FROM USER WHERE username LIKE '${req.tokenDetails.username}'`);
+		if (result.length == 0) { res.status(400).json({ message: 'User not found' }); return; }
+		await query(`UPDATE USER SET password = '${password}' WHERE username='${req.tokenDetails.username}';`);
+		res.status(200).json({message: 'Password Reset Success!'});
+	} catch (error) {
+		res.status(500).json({ message: error });
 	}
 });
 
