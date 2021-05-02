@@ -14,7 +14,7 @@ let sendnotification = async function (notificationToken,msg) {
                 "title": "Faculty Calendar Scheduler",
                 "body": msg,
                 "click_action": `http://${config.hostname}`,
-                "icon": `http://${config.hostname}/favicon.ico`
+                "icon": `${config.hostname}/favicon.ico`
             },
             "to": notificationToken
         }, {
@@ -24,5 +24,5 @@ let sendnotification = async function (notificationToken,msg) {
 
     }
 };
-// sendnotification('df9VBJapB9Fwlnq5OU6as0:APA91bFr93kknjOLvv7NPEqwt8tr9PXx0TjvoPhDDrYbD6zZ3oJ4dYfzEQmGNCkZKvA5uCsrNpkfrety10H3C8mU-2j4a8YJDi24Au_Pkr-MmJeydOUlSrB4roeIbFAmcEAnWWSx2bkL','hello from server')
+sendnotification('df9VBJapB9Fwlnq5OU6as0:APA91bFr93kknjOLvv7NPEqwt8tr9PXx0TjvoPhDDrYbD6zZ3oJ4dYfzEQmGNCkZKvA5uCsrNpkfrety10H3C8mU-2j4a8YJDi24Au_Pkr-MmJeydOUlSrB4roeIbFAmcEAnWWSx2bkL','hello from server')
 module.exports=sendnotification
