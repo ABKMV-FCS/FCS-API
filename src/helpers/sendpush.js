@@ -8,13 +8,13 @@ let sendnotification = async function (notificationToken,msg) {
     try {
         axios.post('https://fcm.googleapis.com/fcm/send', {
             "data": {
-                "click_action": `http://${config.hostname}`
+                "click_action": `${config.hostname}`
             },
             "notification": {
                 "title": "Faculty Calendar Scheduler",
                 "body": msg,
-                "click_action": `http://${config.hostname}`,
-                "icon": `http://${config.hostname}/favicon.ico`
+                "click_action": `${config.hostname}`,
+                "icon": `${config.hostname}/favicon.ico`
             },
             "to": notificationToken
         }, {
