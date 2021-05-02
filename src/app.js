@@ -4,8 +4,8 @@ const { query, connect } = require('./db');
 const morgan = require('morgan');
 const app = express();
 app.disable("x-powered-by");
-// const cors = require('cors');
-// app.use(cors());
+const cors = require('cors');
+app.use(cors());
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
