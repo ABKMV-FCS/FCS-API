@@ -11,7 +11,7 @@ router.post('/fetchtimetable', async (req, res) => {
     let faculties = {};
     for (let index = 0; index < coursecodes.length; index++) {
       let temp = await query(`select faculty from subjects_handled where coursecode like '${coursecodes[index].coursecode}'`);
-      console.log(`select faculty from subjects_handled where coursecode like '${coursecodes[index].coursecode}'`)
+      // console.log(`select faculty from subjects_handled where coursecode like '${coursecodes[index].coursecode}'`)
       let free = {}
       for (let index1 = 0; index1 < temp.length; index1++) {
 
@@ -50,7 +50,7 @@ router.post('/fetchtimetable', async (req, res) => {
     for(let tt of timetable) {
       slotdata[daymap[tt.day]][`slot${tt.slot}`] = tt.coursecode;
     }
-    console.log(timetable);
+    // console.log(timetable);
     return res.status(200).json({ message: 'Retrieval Successful!', faculties, faculty_sub, slotdata });
 
   } catch (error) {
@@ -104,7 +104,7 @@ router.post('/updatetimetable', async (req, res) => {
         course_faculty[ent.coursecode] = ent.faculty;
         let result = await query(`select count(*) as entry from subjects_handled where faculty like '${ent.faculty}' and coursecode like '${ent.coursecode}'`);
         if (result.length === 0 || result[0].entry === 0) {
-          console.log(`faculty: ${ent.faculty} cannot handle coursecode: ${ent.coursecode}`);
+          // console.log(`faculty: ${ent.faculty} cannot handle coursecode: ${ent.coursecode}`);
           return res.status(400).json({ message: `faculty: ${ent.faculty} cannot handle coursecode: ${ent.coursecode}` });
         }
       }
@@ -119,12 +119,12 @@ router.post('/updatetimetable', async (req, res) => {
     }
     for (const fs of faculty_subject) {
       if(fs.faculty === '-') {
-        console.log(fs);
-        await query(`delete from faculty_subject where coursecode like '${fs.coursecode}' and section like '${fs.section}' and dept like '${fs.dept}' and sem=${fs.sem} and academic_year=${fs.academic_year};`); 
+        // console.log(fs);
+        await query(`delete from faculty_subject where coursecode like '${fs.coursecode}' and section like '${fs.section}' and dept like '${fs.dept}' and sem=${fs.sem} and academic_year=${fs.academic_year};`);
       }
       else await query(`replace into faculty_subject values('${fs.faculty}', '${fs.coursecode}' ,'${fs.section}','${fs.dept}','${fs.sem}','${fs.academic_year}')`)
     }
-    await query(`delete from timetable where section like '${section}' and dept like '${dept}' and sem=${sem} and academic_year=${academic_year};`); 
+    await query(`delete from timetable where section like '${section}' and dept like '${dept}' and sem=${sem} and academic_year=${academic_year};`);
     for (const tt of timetable) {
       await query(`replace into timetable values('${tt.slot}','${tt.day}','${tt.coursecode}','${tt.section}','${tt.dept}','${tt.sem}','${tt.academic_year}')`);
     }
