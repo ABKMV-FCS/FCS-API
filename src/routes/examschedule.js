@@ -27,5 +27,19 @@ router.post('/examscheduleinit', async (req, res) => {
   }
 });
 
+router.get('/getexamschedule', async(req,res)=>{
+  let {sem, startdate, enddate} = req.body;
+  
+  try{
+    let activesem = await query(`select * from active_sem`);
+    let examslot = config.examSlotTimings;
+    let result = await query(`select * from exam_slot where sem = '${sem}' and date>='${startdate}' and date<='${enddate}';`)
+    return res.status(200).json({result,totalslot: Object.keys(examslot),activesem: activesem[0], message: " Exam Schedule Fetched Successfully"})
+  }
+  catch(error){
+    console.log(error);
+    return res.status(500).json({message:error});
+  }
+});
 
 module.exports = router;
