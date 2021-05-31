@@ -26,5 +26,16 @@ router.post('/examscheduleinit', async (req, res) => {
   }
 });
 
+router.get('/getexamschedule', async(req,res)=>{
+  let {sem, startdate, enddate} = req.body;
+  try{
+    await query(`select * from exam_slot where sem = '${sem}' and date>='${startdate}' and date<='${enddate}';`)
+    return res.status(200).json({message: " Exam Schedule Fetched Successfully"})
+  }
+  catch(error){
+    console.log(error);
+    return res.status(500).json({message:error});
+  }
+});
 
 module.exports = router;
