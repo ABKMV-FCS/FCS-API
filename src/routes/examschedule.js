@@ -34,8 +34,16 @@ router.post('/getexamschedule', async(req,res)=>{
     let activesem = await query(`select * from active_sem`);
     let { academic_year } = activesem[0];
     let examslot = config.exam_slots;
+
+    let depts = await query(`select dept from dep_duration`);
+    let deptcourses = { };
+    for(dept of depts){
+      let coursecode  = await query(`select coursecode from sem_course where dept like '${dept}';`)
+      deptcourses[dept] = coursecode;
+    }
+    let faculties = await query(`select name as faculty from user where isactive='true' and role='faculty'`);
     let result = await query(`select * from exam_slot where sem = '${sem}' and date>='${startdate}' and date<='${enddate}';`)
-    return res.status(200).json({result,totalslot: Object.keys(examslot),academic_year,  message: " Exam Schedule Fetched Successfully"})
+    return res.status(200).json({result,depts, faculties, deptcourses, totalslot: Object.keys(examslot),academic_year,  message: " Exam Schedule Fetched Successfully"})
   }
   catch(error){
     console.log(error);
@@ -57,6 +65,7 @@ router.post('/downloadexamschedule', async(req,res)=>{
     return res.status(500).json({message:error});
   }
 });
+
 
 
 module.exports = router;
