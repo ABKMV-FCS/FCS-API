@@ -70,7 +70,7 @@ create table dep_duration(
 
 create table exam_slot(
 	date varchar(10) not null,
-	exam_slot varchar not null,
+	exam_slot varchar(10) not null,
 	coursecode varchar(10) not null,
 	sem int not null,
 	dept varchar(10) not null,
