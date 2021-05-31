@@ -41,4 +41,20 @@ router.get('/getexamschedule', async(req,res)=>{
   }
 });
 
+router.get('/downloadexamschedule', async(req,res)=>{
+  let {sem, dept, type} = req.body;
+  
+  try{
+    let activesem = await query(`select * from active_sem`);
+    let { academic_year } = activesem[0];
+    let result = await query(`select * from exam_slot where sem = '${sem}' and dept like '${dept}' and type like '${type}' and academic_year = '${academic_year}';`)
+    return res.status(200).json({result, message: " Exam Schedule Fetched Successfully"})
+  }
+  catch(error){
+    console.log(error);
+    return res.status(500).json({message:error});
+  }
+});
+
+
 module.exports = router;
