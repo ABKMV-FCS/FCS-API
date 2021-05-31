@@ -70,7 +70,7 @@ create table dep_duration(
 
 create table exam_slot(
 	date varchar(10) not null,
-	exam_slot int not null,
+	exam_slot varchar not null,
 	coursecode varchar(10) not null,
 	sem int not null,
 	dept varchar(10) not null,
@@ -223,9 +223,9 @@ insert into faculty_subject values('admin1','14CSE239','C','CSE','4','2018');
 
 insert into active_sem values('0','2018');
 
-insert into exam_slot values('2021-04-05','1','15CSE301','4','CSE','admin','p1','2018');
-insert into exam_slot values('2021-04-04','2','15CSE302','4','CSE','admin','p1','2018');
-insert into exam_slot values('2021-04-03','3','15CSE303','4','CSE','admin','p1','2018');
+insert into exam_slot values('2021-04-05','et1','15CSE301','4','CSE','admin','p1','2018');
+insert into exam_slot values('2021-04-04','et2','15CSE302','4','CSE','admin','p1','2018');
+insert into exam_slot values('2021-04-03','et3','15CSE303','4','CSE','admin','p1','2018');
 
 insert into subjects_handled values('user','14CSE301');
 insert into subjects_handled values('admin','14cse235');
