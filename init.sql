@@ -100,7 +100,7 @@ create table holiday_template(
 
 create table calendar(
 	date varchar(10) not null,
-	slot int not null,
+	slot varchar(10) not null,
 	coursecode varchar(10) not null,
 	section varchar(5) not null,
 	dept varchar(10) not null,
@@ -240,4 +240,3 @@ insert into subjects_handled values('admin1','14cse238');
 insert into subjects_handled values('admin1','14cse239');
 insert into subjects_handled values('admin1','15CSE301');
 insert into subjects_handled values('admin1','15CSE302');
-insert into subjects_handled values('user','14CSE301');
