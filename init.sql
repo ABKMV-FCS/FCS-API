@@ -34,6 +34,19 @@ drop table dept_class;
 
 drop table profilechangerequest;
 
+drop table student_subscribe;
+
+
+create table student_subscribe(
+email varchar(50) not null primary key,
+name varchar(100) not null,
+dept varchar(10) not null,
+section varchar(5) not null,
+sem int not null,
+academic_year int not null,
+fcmToken varchar(512)
+);
+
 CREATE TABLE user(
 	username varchar(50) primary key,
 	password varchar(500) not null,
@@ -43,7 +56,8 @@ CREATE TABLE user(
 	name varchar(100) not null,
 	isactive varchar(5) not null,
 	profilephoto varchar(500),
-	qualifications varchar(500)
+	qualifications varchar(500),
+	fcmToken varchar(512)
 );
 
 create table timetable(
@@ -70,7 +84,7 @@ create table dep_duration(
 
 create table exam_slot(
 	date varchar(10) not null,
-	exam_slot int not null,
+	exam_slot varchar(10) not null,
 	coursecode varchar(10) not null,
 	sem int not null,
 	dept varchar(10) not null,
@@ -100,7 +114,7 @@ create table holiday_template(
 
 create table calendar(
 	date varchar(10) not null,
-	slot int not null,
+	slot varchar(10) not null,
 	coursecode varchar(10) not null,
 	section varchar(5) not null,
 	dept varchar(10) not null,
@@ -213,7 +227,7 @@ insert into timetable values('2','THU','14CSE237','c','CSE','4','2018');
 insert into timetable values('3','THU','14CSE238','c','CSE','4','2018');
 insert into timetable values('4','THU','14CSE239','c','CSE','4','2018');
 
-	
+
 insert into faculty_subject values('admin1','15CSE301','C','CSE','4','2018');
 insert into faculty_subject values('admin1','15CSE302','C','CSE','4','2018');
 insert into faculty_subject values('admin1','14CSE235','C','CSE','4','2018');
@@ -223,9 +237,9 @@ insert into faculty_subject values('admin1','14CSE239','C','CSE','4','2018');
 
 insert into active_sem values('0','2018');
 
-insert into exam_slot values('2021-04-05','1','15CSE301','4','CSE','admin','p1','2018');
-insert into exam_slot values('2021-04-04','2','15CSE302','4','CSE','admin','p1','2018');
-insert into exam_slot values('2021-04-03','3','15CSE303','4','CSE','admin','p1','2018');
+insert into exam_slot values('2021-04-05','et1','15CSE301','4','CSE','admin','p1','2018');
+insert into exam_slot values('2021-04-04','et2','15CSE302','4','CSE','admin','p1','2018');
+insert into exam_slot values('2021-04-03','et3','15CSE303','4','CSE','admin','p1','2018');
 
 insert into subjects_handled values('user','14CSE301');
 insert into subjects_handled values('admin','14cse235');
@@ -241,3 +255,6 @@ insert into subjects_handled values('admin1','14cse239');
 insert into subjects_handled values('admin1','15CSE301');
 insert into subjects_handled values('admin1','15CSE302');
 insert into subjects_handled values('user','14CSE301');
+
+
+insert into student_subscribe values('student@gmail.com','student','CSE','C',6,2020,null);

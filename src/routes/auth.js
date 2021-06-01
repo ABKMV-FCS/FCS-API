@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('../../config.json');
 const mailer = require('../helpers/mailer');
-const { response } = require('express');
+
 var admin = require("firebase-admin");
 
 var serviceAccount = require("../../firebasecreds/facultycalendarscheduler-firebase-adminsdk-s1kqm-24a6ba3f82.json");
@@ -25,13 +25,21 @@ let createJWT = (record, expiresIn) => {
 	let { username, email, role } = record;
 	return jwt.sign({ username, email, role }, config.jwt_secret, { expiresIn });
 };
+async function storeFcmToken(username,fcmToken){
+	try {
+		await query(`update user set fcmToken='${fcmToken}' where username like '${username}'`)
+	} catch (error) {
+
+	}
+}
 
 router.post('/login', async (req, res) => {
-	let { username, password, staysignedin } = req.body;
+	let { username, password, staysignedin,fcmToken } = req.body;
 	try {
 		let result = await query(`SELECT * FROM USER WHERE username LIKE '${username}'`);
 		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
 		if (!bcrypt.compareSync(password, result[0].password)) { return res.status(400).json({ message: 'username/password incorrect' }); }
+		storeFcmToken(username,fcmToken)
 		if(!staysignedin) {
 			let token = createJWT(result[0], '24h');
 			res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: 24*60 });
@@ -45,7 +53,7 @@ router.post('/login', async (req, res) => {
 	}
 });
 router.post('/googlelogin', async (req, res) => {
-	let { idToken,staysignedin } = req.body;
+	let { idToken,staysignedin,fcmToken } = req.body;
 	try {
 		let email=''
 		try {
@@ -61,6 +69,7 @@ router.post('/googlelogin', async (req, res) => {
 		let result = await query(`SELECT * FROM USER WHERE email LIKE '${email}'`);
 
 		if (result.length == 0) { res.status(400).json({ message: 'username not found' }); return; }
+		storeFcmToken(result[0].username,fcmToken)
 		if(!staysignedin) {
 			let token = createJWT(result[0], '24h');
 			res.status(200).json({ token, name: result[0].name, role: result[0].role, message: 'Logged in successfully!', expiration: 24*60 });
