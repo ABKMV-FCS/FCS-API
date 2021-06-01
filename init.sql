@@ -34,6 +34,8 @@ drop table dept_class;
 
 drop table profilechangerequest;
 
+drop table student_subscribe;
+
 CREATE TABLE user(
 	username varchar(50) primary key,
 	password varchar(500) not null,
@@ -43,7 +45,8 @@ CREATE TABLE user(
 	name varchar(100) not null,
 	isactive varchar(5) not null,
 	profilephoto varchar(500),
-	qualifications varchar(500)
+	qualifications varchar(500),
+	fcmToken varchar(512)
 );
 
 create table timetable(
@@ -213,7 +216,7 @@ insert into timetable values('2','THU','14CSE237','c','CSE','4','2018');
 insert into timetable values('3','THU','14CSE238','c','CSE','4','2018');
 insert into timetable values('4','THU','14CSE239','c','CSE','4','2018');
 
-	
+
 insert into faculty_subject values('admin1','15CSE301','C','CSE','4','2018');
 insert into faculty_subject values('admin1','15CSE302','C','CSE','4','2018');
 insert into faculty_subject values('admin1','14CSE235','C','CSE','4','2018');
@@ -240,3 +243,7 @@ insert into subjects_handled values('admin1','14cse238');
 insert into subjects_handled values('admin1','14cse239');
 insert into subjects_handled values('admin1','15CSE301');
 insert into subjects_handled values('admin1','15CSE302');
+insert into subjects_handled values('user','14CSE301');
+
+
+insert into student_subscribe values('student@gmail.com','student','CSE','C',6,2020,null);

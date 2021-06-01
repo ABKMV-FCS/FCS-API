@@ -24,5 +24,5 @@ let sendnotification = async function (notificationToken,msg) {
 
     }
 };
-// sendnotification('df9VBJapB9Fwlnq5OU6as0:APA91bFr93kknjOLvv7NPEqwt8tr9PXx0TjvoPhDDrYbD6zZ3oJ4dYfzEQmGNCkZKvA5uCsrNpkfrety10H3C8mU-2j4a8YJDi24Au_Pkr-MmJeydOUlSrB4roeIbFAmcEAnWWSx2bkL','hello from server')
+// sendnotification('cBMenRE70MAbSSfEEztWK6:APA91bGMsjzlnOc2554lcSR4_uyV2VZp9GJiq_zpAVSXTus_jz5Hd3y4KQ2HAGtu-uDMCxej02LPznB1fW6sOcnDncpzVMNXLGYwh12qCN_nH8h0P7LHrhYXx-EXsJ6VjAf5vShVygLd','hello from server')
 module.exports=sendnotification
