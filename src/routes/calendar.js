@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { query } = require('../db');
+const config = require('../../config.json');
 
 router.post('/fetchtimetable', async (req, res) => {
   let { dept, sem, section } = req.body;
@@ -51,7 +52,7 @@ router.post('/fetchtimetable', async (req, res) => {
       slotdata[daymap[tt.day]][`slot${tt.slot}`] = tt.coursecode;
     }
     // console.log(timetable);
-    return res.status(200).json({ message: 'Retrieval Successful!', faculties, faculty_sub, slotdata });
+    return res.status(200).json({ message: 'Retrieval Successful!', faculties, faculty_sub, slotdata, slots: config.slots });
 
   } catch (error) {
     console.log(error);

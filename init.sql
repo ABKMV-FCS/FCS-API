@@ -34,6 +34,10 @@ drop table dept_class;
 
 drop table profilechangerequest;
 
+drop table odrequest;
+
+drop table leaverequest;
+
 drop table student_subscribe;
 
 
@@ -183,6 +187,27 @@ create table profilechangerequest(
 	name varchar(100),
 	email varchar(100),
 	primary key(faculty)
+);
+
+create table odrequest(
+	faculty varchar(50),
+	date varchar(10),
+	fromslot varchar(10),
+	toslot varchar(10),
+	reason varchar(100),
+	status varchar(10),
+	primary key (faculty,date,fromslot,toslot)
+);
+
+create table leaverequest(
+	faculty varchar(50),
+	fromdate varchar(10),
+	todate varchar(10),
+	fromslot varchar(10),
+	toslot varchar(10),
+	reason varchar(100),
+	status varchar(10),
+	primary key (faculty,fromdate,todate,fromslot,toslot)
 );
 
 create table sem_course(
