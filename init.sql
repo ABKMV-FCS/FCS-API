@@ -36,6 +36,17 @@ drop table profilechangerequest;
 
 drop table student_subscribe;
 
+
+create table student_subscribe(
+email varchar(50) not null primary key,
+name varchar(100) not null,
+dept varchar(10) not null,
+section varchar(5) not null,
+sem int not null,
+academic_year int not null,
+fcmToken varchar(512)
+);
+
 CREATE TABLE user(
 	username varchar(50) primary key,
 	password varchar(500) not null,
@@ -62,7 +73,7 @@ create table timetable(
 
 create table active_sem(
 	odd int not null,
-	academic_year int not null,
+	academic_year int not null
 );
 
 create table dep_duration(
