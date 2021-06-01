@@ -157,6 +157,7 @@ router.post('/resetpassword', verifyJWT, async (req, res) => {
 	try {
 		let result = await query(`SELECT * FROM USER WHERE username LIKE '${req.tokenDetails.username}'`);
 		if (result.length == 0) { res.status(400).json({ message: 'User not found' }); return; }
+		password = bcrypt.hashSync(password, 12)
 		await query(`UPDATE USER SET password = '${password}' WHERE username='${req.tokenDetails.username}';`);
 		res.status(200).json({message: 'Password Reset Success!'});
 	} catch (error) {

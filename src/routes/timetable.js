@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { query } = require('../db');
+const verifyJWT = require('./helpers/verify_jwt');
 
 router.post('/studenttimetabledownload', async (req, res) => {
   let { dept, sec, sem } = req.body;
@@ -76,7 +77,7 @@ router.get('/readdept', async (req, res) => {
     return res.status(500).json({ message: error });
   }
 });
-router.post('/createdept', async (req, res) => {
+router.post('/createdept',verifyJWT, async (req, res) => {
   let { dept, sems } = req.body;
   try {
     await query(`insert into dep_duration values ('${dept}','${sems}');`);
@@ -85,7 +86,7 @@ router.post('/createdept', async (req, res) => {
     return res.status(500).json({ message: error });
   }
 });
-router.post('/updatedept', async (req, res) => {
+router.post('/updatedept',verifyJWT, async (req, res) => {
   let { sems, dept, olddept } = req.body;
   try {
     await query(`update dep_duration set sems='${sems}', dept='${dept}' where dept like '${olddept}';`);
@@ -94,7 +95,7 @@ router.post('/updatedept', async (req, res) => {
     return res.status(500).json({ message: error });
   }
 });
-router.post('/deletedept', async (req, res) => {
+router.post('/deletedept', verifyJWT,async (req, res) => {
   let { dept } = req.body;
   try {
     let result = await query(`select * from dep_duration where dept like '${dept}';`);
@@ -126,7 +127,7 @@ router.get('/readclassesunderdept/:dept', async (req, res) => {
     return res.status(500).json({ message: error });
   }
 });
-router.post('/createclassesunderdept', async (req, res) => {
+router.post('/createclassesunderdept',verifyJWT, async (req, res) => {
   let { dept, section } = req.body;
   try {
     await query(`insert into dept_class values ('${dept}','${section}');`);
@@ -136,7 +137,7 @@ router.post('/createclassesunderdept', async (req, res) => {
   }
 });
 
-router.post('/updateclassesunderdept', async (req, res) => {
+router.post('/updateclassesunderdept',verifyJWT, async (req, res) => {
   let { dept, section, oldsection } = req.body;
   try {
     await query(`update dept_class set dept='${dept}', section='${section}' where section like '${oldsection}';`);
@@ -146,7 +147,7 @@ router.post('/updateclassesunderdept', async (req, res) => {
   }
 });
 
-router.post('/deleteclassesunderdept', async (req, res) => {
+router.post('/deleteclassesunderdept',verifyJWT, async (req, res) => {
   let { dept, section } = req.body;
   try {
     let result = await query(`select * from dept_class where dept like '${dept}' and section like '${section}';`);
@@ -167,7 +168,7 @@ router.get('/readcourses', async (req, res) => {
   }
 });
 
-router.post('/createcourse', async (req, res) => {
+router.post('/createcourse',verifyJWT, async (req, res) => {
   let { coursecode, name } = req.body;
   try {
     await query(`insert into course values ('${coursecode}','${name}');`);
@@ -176,7 +177,7 @@ router.post('/createcourse', async (req, res) => {
     return res.status(500).json({ message: error });
   }
 });
-router.post('/updatecourse', async (req, res) => {
+router.post('/updatecourse',verifyJWT, async (req, res) => {
   let { name, coursecode, oldcoursecode } = req.body;
   try {
     await query(`update course set name='${name}', coursecode='${coursecode}' where coursecode like '${oldcoursecode}';`);
@@ -185,7 +186,7 @@ router.post('/updatecourse', async (req, res) => {
     return res.status(500).json({ message: error });
   }
 });
-router.post('/deletecourse', async (req, res) => {
+router.post('/deletecourse',verifyJWT, async (req, res) => {
   let { coursecode } = req.body;
   try {
     let result = await query(`select * from course where coursecode like '${coursecode}';`);
@@ -212,7 +213,7 @@ router.post('/getcourselistundersem', async (req, res) => {
   }
 });
 
-router.post('/createcourseundersem', async (req, res) => {
+router.post('/createcourseundersem',verifyJWT, async (req, res) => {
   let { coursecodes, dept, sem } = req.body;
   try {
     await query(`delete from sem_course where dept like '${dept}' and sem=${sem};`);
