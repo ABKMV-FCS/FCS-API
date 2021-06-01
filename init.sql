@@ -59,7 +59,7 @@ create table timetable(
 
 create table active_sem(
 	odd int not null,
-	academic_year int not null
+	academic_year int not null,
 );
 
 create table dep_duration(

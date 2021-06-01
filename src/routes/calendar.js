@@ -60,12 +60,22 @@ router.post('/fetchtimetable', async (req, res) => {
   }
 });
 
+async function updateCalendarTable(){
+  var now = new Date();
+var daysOfYear = [];
+
+for (var d = new Date(2012, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
+  await query(``)
+    daysOfYear.push(new Date(d));
+}
+}
+
 router.post('/updatetimetable', async (req, res) => {
   try {
     let { slotdata, coursetofacultydata, dept, sem, section } = req.body;
     let course_faculty = {}
     let result = await query(`select * from active_sem`);
-    let { odd, academic_year } = result[0];
+    let { odd, academic_year, start_date, end_date } = result[0];
     let daymap = {'monday': 'MON','tuesday': 'TUE','wednesday': 'WED','thursday': 'THU','friday': 'FRI'}
     let timetable = [];
     for (let sd of slotdata) {
@@ -128,6 +138,11 @@ router.post('/updatetimetable', async (req, res) => {
     for (const tt of timetable) {
       await query(`replace into timetable values('${tt.slot}','${tt.day}','${tt.coursecode}','${tt.section}','${tt.dept}','${tt.sem}','${tt.academic_year}')`);
     }
+    await query(`delete from calendar where section like '${section}' and dept like '${dept}' and sem=${sem} and academic_year=${academic_year} and (slot='1' or slot='2' or slot='3' or slot='4' or slot='5' or slot='6') and date>='${start_date}' and date<='${end_date}';`);
+    
+    updateCalendarTable()
+    let day = moment(row[0], "YYYY-MM-DD").format('dddd');
+    
     return res.status(200).json({ message: "update successful, time table successfully changed" });
   } catch (error) {
     console.log(error);
