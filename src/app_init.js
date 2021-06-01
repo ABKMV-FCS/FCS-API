@@ -7,7 +7,7 @@ let seed_admins = async () => {
 	for (let admin of config.admins) {
 		try {
 			let hashpassword = bcrypt.hashSync(admin.password, 12);
-			await query(`INSERT INTO USER VALUES('${admin.username}','${hashpassword}','${admin.email}','admin','${admin.phone}','${admin.name}','${admin.isactive}','${admin.profilephoto}','${admin.qualifications}')`);
+			await query(`INSERT INTO USER VALUES('${admin.username}','${hashpassword}','${admin.email}','admin','${admin.phone}','${admin.name}','${admin.isactive}','${admin.profilephoto}','${admin.qualifications}',null)`);
 			console.log(`${admin.username} created`);
 		} catch (error) {
 			if (error.code === 'ER_DUP_ENTRY')

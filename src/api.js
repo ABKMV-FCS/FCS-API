@@ -6,4 +6,5 @@ router.use('/auth', require('./routes/auth'))
 router.use('/profile', verifyJWT, require('./routes/profile'))
 router.use('/timetable', verifyJWT, require('./routes/timetable'))
 router.use('/calendar', verifyJWT, require('./routes/calendar'))
+router.use('/student', require('./routes/student'))
 module.exports = router;
