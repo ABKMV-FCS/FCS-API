@@ -203,11 +203,9 @@ create table leaverequest(
 	faculty varchar(50),
 	fromdate varchar(10),
 	todate varchar(10),
-	fromslot varchar(10),
-	toslot varchar(10),
 	reason varchar(100),
 	status varchar(10),
-	primary key (faculty,fromdate,todate,fromslot,toslot)
+	primary key (faculty,fromdate,todate)
 );
 
 create table sem_course(

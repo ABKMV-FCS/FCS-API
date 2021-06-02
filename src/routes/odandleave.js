@@ -15,7 +15,7 @@ router.post('/requestod', async (req, res) => {
     let { username } = req.tokenDetails;
     let { reason, date, fromslot, toslot } = req.body;
     try {
-        let result = await query(`insert INTO odrequest VALUES('${username}','${date}','${fromslot}','${toslot}','${reason}','pending')`);
+        let result = await query(`insert INTO odrequest VALUES('${username}','${date}','${fromslot}','${toslot}','${reason}','pending') ON DUPLICATE KEY UPDATE reason='${reason}',status='pending'`);
 		if (result.affectedRows > 0) {
 			return res.status(200).json({ message: 'Request sent Successfully!' });
 		}
@@ -52,6 +52,7 @@ router.post('/acceptodrequest', async (req, res) => {
 		let result = (await query(`select * FROM odrequest where faculty like '${faculty}' and status like 'pending';`));
 		if (result.length == 0) return res.status(400).json({ message: 'No Requests Found!' });
 		let { date, fromslot, toslot, reason } = result[0];
+		await query(`delete from calendar where (coursecode,section,dept,sem,academic_year) IN (select coursecode,section,dept,sem,academic_year from faculty_subject where faculty like '${faculty}') and date like '${date}' and slot >= '${fromslot[4]}' and slot <= '${toslot[4]}'`);
 		await query(`UPDATE odrequest SET status='approved' WHERE faculty like '${faculty}' and date like '${date}' and fromslot like '${fromslot}' and toslot like '${toslot}' and reason like '${reason}';`);
 		res.status(200).json({ message: 'OD Request Accepted successfully!' });
 	} catch (error) {
@@ -77,9 +78,9 @@ router.post('/rejectodrequest', async (req, res) => {
 
 router.post('/requestleave', async (req, res) => {
     let { username } = req.tokenDetails;
-    let { reason, fromdate, todate, fromslot, toslot } = req.body;
+    let { reason, fromdate, todate } = req.body;
     try {
-        let result = await query(`insert INTO leaverequest VALUES('${username}','${fromdate}','${todate}','${fromslot}','${toslot}','${reason}','pending')`);
+        let result = await query(`insert INTO leaverequest VALUES('${username}','${fromdate}','${todate}','${reason}','pending') ON DUPLICATE KEY UPDATE reason='${reason}',status='pending'`);
 		if (result.affectedRows > 0) {
 			return res.status(200).json({ message: 'Request sent Successfully!' });
 		}
@@ -115,8 +116,9 @@ router.post('/acceptleaverequest', async (req, res) => {
 	try {
 		let result = (await query(`select * FROM leaverequest where faculty like '${faculty}' and status like 'pending';`));
 		if (result.length == 0) return res.status(400).json({ message: 'No Requests Found!' });
-		let { fromdate, todate, fromslot, toslot, reason } = result[0];
-		await query(`UPDATE leaverequest SET status='approved' WHERE faculty like '${faculty}' and fromdate like '${fromdate}' and todate like '${todate}' and fromslot like '${fromslot}' and toslot like '${toslot}' and reason like '${reason}';`);
+		let { fromdate, todate, reason } = result[0];
+		await query(`delete from calendar where (coursecode,section,dept,sem,academic_year) IN (select coursecode,section,dept,sem,academic_year from faculty_subject where faculty like '${faculty}') and date >= '${fromdate}' and date <= '${todate}'`);
+		await query(`UPDATE leaverequest SET status='approved' WHERE faculty like '${faculty}' and fromdate like '${fromdate}' and todate like '${todate}' and reason like '${reason}';`);
 		res.status(200).json({ message: 'Leave Request Accepted successfully!' });
 	} catch (error) {
 		console.log(error);
@@ -131,8 +133,8 @@ router.post('/rejectleaverequest', async (req, res) => {
 	try {
 		let result = (await query(`select * FROM leaverequest where faculty like '${faculty}' and status like 'pending';`));
 		if (result.length == 0) return res.status(400).json({ message: 'No Requests Found!' });
-		let { fromdate, todate, fromslot, toslot, reason } = result[0];
-		await query(`UPDATE leaverequest SET status='rejected' WHERE faculty like '${faculty}' and fromdate like '${fromdate}' and todate like '${todate}' and fromslot like '${fromslot}' and toslot like '${toslot}' and reason like '${reason}';`);
+		let { fromdate, todate, reason } = result[0];
+		await query(`UPDATE leaverequest SET status='rejected' WHERE faculty like '${faculty}' and fromdate like '${fromdate}' and todate like '${todate}' and reason like '${reason}';`);
 		res.status(200).json({ message: 'Leave Request Rejected successfully!' });
 	} catch (error) {
 		return res.status(500).json({ message: error });
