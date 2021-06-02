@@ -60,6 +60,8 @@ create table timetable(
 create table active_sem(
 	odd int not null,
 	academic_year int not null,
+    start_date varchar(10) not null,
+    end_date varchar(10) not null
 );
 
 create table dep_duration(
@@ -221,7 +223,8 @@ insert into faculty_subject values('admin1','14CSE237','C','CSE','4','2018');
 insert into faculty_subject values('admin1','14CSE238','C','CSE','4','2018');
 insert into faculty_subject values('admin1','14CSE239','C','CSE','4','2018');
 
-insert into active_sem values('0','2018');
+
+insert into active_sem values('0','2018','2018-05-21','2019-05-12');
 
 insert into exam_slot values('2021-04-05','et1','15CSE301','4','CSE','admin','p1','2018');
 insert into exam_slot values('2021-04-04','et2','15CSE302','4','CSE','admin','p1','2018');

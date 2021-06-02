@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { query } = require('../db');
-const verifyJWT = require('./helpers/verify_jwt');
+const verifyJWT = require('../helpers/verify_jwt');
 
 router.post('/studenttimetabledownload', async (req, res) => {
   let { dept, sec, sem } = req.body;
