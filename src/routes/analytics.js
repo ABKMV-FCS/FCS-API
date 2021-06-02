@@ -30,5 +30,30 @@ router.get('/getclasscoursedetails',async (req,res)=>{ //how many hours is each 
     }
 })
 
+router.get('/getfacultyworkinghours',async (req,res)=>{ //how many hours is a faculty going to work
+    try{
+        let activesem = await query(`select * from active_sem`);
+        let { academic_year } = activesem[0];
+        let result = await query(`select count(*) as nooffaculties,hours from (select count(*) as hours,faculty from faculty_subject fs inner join timetable tt on fs.coursecode = tt.coursecode and fs.section=tt.section and fs.dept = tt.dept and fs.sem = tt.sem and fs.academic_year=tt.academic_year and tt.academic_year like '${academic_year}' GROUP BY faculty) hrs group by hours;`)
+        return res.status(200).json({result, message: "Faculty Working Hours Fetched Successfully"});
+    }
+    catch(error){
+        console.log(error);
+        return res.status(500).json({message:error});
+    }
+})
+
+router.get('/getfacultyfreehours',async (req,res)=>{ //how many hours is a faculty free
+    try{
+        let activesem = await query(`select * from active_sem`);
+        let { academic_year } = activesem[0];
+        let result = await query(`select count(*) as nooffaculties,hours from (select (30-count(*)) as hours,faculty from faculty_subject fs inner join timetable tt on fs.coursecode = tt.coursecode and fs.section=tt.section and fs.dept = tt.dept and fs.sem = tt.sem and fs.academic_year = tt.academic_year and tt.academic_year like '${academic_year}' GROUP BY faculty) hrs group by hours;`)
+        return res.status(200).json({result, message: "Faculty Free Hours Fetched Successfully"});
+    }
+    catch(error){
+        console.log(error);
+        return res.status(500).json({message:error});
+    }
+})
 
 module.exports = router;

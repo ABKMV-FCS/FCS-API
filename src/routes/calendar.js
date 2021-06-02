@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { query } = require('../db');
+const verifyJWT = require('../helpers/verify_jwt');
+const moment = require('moment');
 const config = require('../../config.json');
 
-router.post('/fetchtimetable', async (req, res) => {
+router.post('/fetchtimetable',verifyJWT, async (req, res) => {
   let { dept, sem, section } = req.body;
   try {
     let result = await query(`select * from active_sem`);
@@ -61,22 +63,29 @@ router.post('/fetchtimetable', async (req, res) => {
   }
 });
 
-async function updateCalendarTable(){
-  var now = new Date();
-var daysOfYear = [];
-
-for (var d = new Date(2012, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
-  await query(``)
-    daysOfYear.push(new Date(d));
+async function updateCalendarTable(start_date,end_date,section,dept,sem,academic_year,timetable,emergency_holidays){
+  let daymap = {'Monday': 'MON','Tuesday': 'TUE','Wednesday': 'WED','Thursday': 'THU','Friday': 'FRI','Saturday':'SAT','Sunday':'SUN'} 
+  start_date =  new Date(start_date)
+  end_date=new Date(end_date)
+  for (var d = start_date; d< end_date; d.setDate(d.getDate() + 1)) {
+    if( !emergency_holidays.includes(d) && daymap[moment(d, "YYYY-MM-DD").format('dddd')] !='SUN' && daymap[moment(d, "YYYY-MM-DD").format('dddd')] != 'SAT' ){
+      for(ttobj in timetable){
+        console.log(daymap[moment(d, "YYYY-MM-DD").format('dddd')], timetable[ttobj]["day"] , section , timetable[ttobj]["section"] , dept , timetable[ttobj]["dept"] , sem , timetable[ttobj]["sem"] , academic_year ,timetable[ttobj]["academic_year"]);
+        if(daymap[moment(d, "YYYY-MM-DD").format('dddd')] == timetable[ttobj]["day"] && section == timetable[ttobj]["section"] && dept == timetable[ttobj]["dept"] && sem == timetable[ttobj]["sem"] && academic_year == timetable[ttobj]["academic_year"]){
+          let result = await query(`insert into calendar values('${moment(d).format("YYYY-MM-DD")}','${timetable[ttobj]["slot"]}','${timetable[ttobj]["coursecode"]}','${timetable[ttobj]["section"]}','${timetable[ttobj]["dept"]}','${timetable[ttobj]["sem"]}','${timetable[ttobj]["academic_year"]}');`)
+        }
+      } 
+    }
+  }
+  
 }
-}
 
-router.post('/updatetimetable', async (req, res) => {
+router.post('/updatetimetable',verifyJWT, async (req, res) => {
   try {
     let { slotdata, coursetofacultydata, dept, sem, section } = req.body;
     let course_faculty = {}
     let result = await query(`select * from active_sem`);
-    let { odd, academic_year, start_date, end_date } = result[0];
+    let { academic_year,start_date,end_date } = result[0];
     let daymap = {'monday': 'MON','tuesday': 'TUE','wednesday': 'WED','thursday': 'THU','friday': 'FRI'}
     let timetable = [];
     for (let sd of slotdata) {
@@ -125,8 +134,6 @@ router.post('/updatetimetable', async (req, res) => {
         console.log(`faculty for ${period.coursecode} is not found`);
         return res.status(400).json({ message: `faculty for ${period.coursecode} is not found` });
       }
-
-    
     }
     for (const fs of faculty_subject) {
       if(fs.faculty === '-') {
@@ -140,15 +147,24 @@ router.post('/updatetimetable', async (req, res) => {
       await query(`replace into timetable values('${tt.slot}','${tt.day}','${tt.coursecode}','${tt.section}','${tt.dept}','${tt.sem}','${tt.academic_year}')`);
     }
     await query(`delete from calendar where section like '${section}' and dept like '${dept}' and sem=${sem} and academic_year=${academic_year} and (slot='1' or slot='2' or slot='3' or slot='4' or slot='5' or slot='6') and date>='${start_date}' and date<='${end_date}';`);
+    timetable = await query(`select * from timetable where section like '${section}' and dept like '${dept}' and sem=${sem} and academic_year=${academic_year};`)
+    let emergency_holidays = await query(`select date from holiday;`);
+    let temp = []
+    for(tempObj of emergency_holidays){
+      temp.push(tempObj["date"])
+    }
     
-    updateCalendarTable()
-    let day = moment(row[0], "YYYY-MM-DD").format('dddd');
+    await updateCalendarTable(start_date,end_date,section,dept,sem,academic_year,timetable,temp)
+    
     
     return res.status(200).json({ message: "update successful, time table successfully changed" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error });
   }
-
+  
 });
+
+router.get('/test', async (req, res) => {
+})
 module.exports = router;
