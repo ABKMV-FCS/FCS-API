@@ -34,6 +34,23 @@ drop table dept_class;
 
 drop table profilechangerequest;
 
+drop table odrequest;
+
+drop table leaverequest;
+
+drop table student_subscribe;
+
+
+create table student_subscribe(
+email varchar(50) not null primary key,
+name varchar(100) not null,
+dept varchar(10) not null,
+section varchar(5) not null,
+sem int not null,
+academic_year int not null,
+fcmToken varchar(512)
+);
+
 CREATE TABLE user(
 	username varchar(50) primary key,
 	password varchar(500) not null,
@@ -43,7 +60,8 @@ CREATE TABLE user(
 	name varchar(100) not null,
 	isactive varchar(5) not null,
 	profilephoto varchar(500),
-	qualifications varchar(500)
+	qualifications varchar(500),
+	fcmToken varchar(512)
 );
 
 create table timetable(
@@ -173,6 +191,27 @@ create table profilechangerequest(
 	primary key(faculty)
 );
 
+create table odrequest(
+	faculty varchar(50),
+	date varchar(10),
+	fromslot varchar(10),
+	toslot varchar(10),
+	reason varchar(100),
+	status varchar(10),
+	primary key (faculty,date,fromslot,toslot)
+);
+
+create table leaverequest(
+	faculty varchar(50),
+	fromdate varchar(10),
+	todate varchar(10),
+	fromslot varchar(10),
+	toslot varchar(10),
+	reason varchar(100),
+	status varchar(10),
+	primary key (faculty,fromdate,todate,fromslot,toslot)
+);
+
 create table sem_course(
 	dept varchar(10),
 	sem int not null,
@@ -215,7 +254,7 @@ insert into timetable values('2','THU','14CSE237','c','CSE','4','2018');
 insert into timetable values('3','THU','14CSE238','c','CSE','4','2018');
 insert into timetable values('4','THU','14CSE239','c','CSE','4','2018');
 
-	
+
 insert into faculty_subject values('admin1','15CSE301','C','CSE','4','2018');
 insert into faculty_subject values('admin1','15CSE302','C','CSE','4','2018');
 insert into faculty_subject values('admin1','14CSE235','C','CSE','4','2018');
@@ -243,3 +282,7 @@ insert into subjects_handled values('admin1','14cse238');
 insert into subjects_handled values('admin1','14cse239');
 insert into subjects_handled values('admin1','15CSE301');
 insert into subjects_handled values('admin1','15CSE302');
+insert into subjects_handled values('user','14CSE301');
+
+
+insert into student_subscribe values('student@gmail.com','student','CSE','C',6,2020,null);
