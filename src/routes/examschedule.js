@@ -3,8 +3,9 @@ const router = express.Router();
 const { query } = require('../db');
 const config = require('../../config.json');
 const moment = require('moment');
+const verifyJWT = require('../helpers/verify_jwt');
 
-router.post('/examscheduleinit', async (req, res) => {
+router.post('/examscheduleinit', verifyJWT, async (req, res) => {
   let { es, sem, startDate, endDate } = req.body;
   try {
     let result = await query(`select * from active_sem`);

@@ -1,33 +1,4 @@
-To do:
-
-clear all entries in between dates given in calendar table
-delete from calendar where sem like '${sem}' and academic_year like '${academic_year}' and date>='${startdate}' and date<='${enddate}';
-
-You get exam schedule - es
-
-
-insert into exam slots table
-
-
-for a faculty, check the slots they handle and check the day of the particular date
-
-    i. take period slots from exam slots
-    config["exam_slots"][row[1]]["periods"]
-    ii. for the particular day in timetable
-    moment(row[0], "YYYY-MM-DD").format('dddd')
-
-go to faculty subject and check which classes the faculty handles
-    i. dept, coursecode, section and sem for each faculty where sem is not as given in exam schedule
-
-        select dept, coursecode,section,sem from faculty_subject fs where fs.sem <> '${row[3]}' and fs.faculty is like '${row[5]}'
-
-    ii. using this info, search in timetable for the classes in the particular period slot for the particular day
-
-       delete from calendar c where (coursecode, slot,dept,class,sem) IN (select coursecode,  slot,dept,section,sem from timetable t where t.day= '${moment(row[0], "YYYY-MM-DD").format('dddd')}' and (t.slot >= '${config["exam_slots"][row[1]]["periods"][0]}' and t.slot <= '${config["exam_slots"][row[1]]["periods"][len-1]}')) and (t.dept, t.coursecode,t.section,t.sem) IN (select dept, coursecode,section,sem from faculty_subject fs where fs.sem <> '${row[3]}' and fs.faculty is like '${row[5]}')
-
-go to time table and check if the faculty's class slot and exam slot coincide
-
-delete from calendar where 
-
-
-if they coincide, free the classes from calendar 
+analytics
+examschedule
+od and leave
+student
