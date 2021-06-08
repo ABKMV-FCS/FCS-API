@@ -2,6 +2,8 @@ FROM node:latest
 
 MAINTAINER Monish Raaj L
 
+RUN echo "Tryin to build my first application"
+
 COPY . /var/www
 
 WORKDIR /var/www
