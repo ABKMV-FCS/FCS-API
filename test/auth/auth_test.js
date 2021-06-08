@@ -21,7 +21,7 @@ describe('login as admin, register faculty, login as faculty,stay signed in,forg
             done();
         });
     });
-    
+
     it('Register faculty', (done) => {
         chai.request(test_config.baseURL).post('/auth/register').set('Authorization', `Bearer ${admin_token}`).send(auth_config.register).end((err, res) => {
             console.log(res.body.message);
@@ -29,7 +29,7 @@ describe('login as admin, register faculty, login as faculty,stay signed in,forg
             done();
         });
     });
-    
+
     it('Login as faculty', (done) => {
         let { username, password } = auth_config.register;
         chai.request(test_config.baseURL).post('/auth/login').set('Authorization', `Bearer ${admin_token}`).send({ username, password }).end((err, res) => {
@@ -40,7 +40,9 @@ describe('login as admin, register faculty, login as faculty,stay signed in,forg
         });
     });
     it('Stay signed in', (done) => {
-        chai.request(test_config.baseURL).post('/auth/staysignedin').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
+
+        let { username, password } = auth_config.register;
+        chai.request(test_config.baseURL).post('/auth/login').set('Authorization', `Bearer ${admin_token}`).send({ username, password }).end((err, res) => {
             res.should.have.status(200);
             done();
         });
@@ -55,5 +57,5 @@ describe('login as admin, register faculty, login as faculty,stay signed in,forg
         });
     });
 
-    
+
 });
