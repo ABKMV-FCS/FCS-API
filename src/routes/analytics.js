@@ -21,7 +21,7 @@ router.get('/getclasscoursedetails',async (req,res)=>{ //how many hours is each 
     try{
         let activesem = await query(`select * from active_sem`);
         let { academic_year } = activesem[0];
-        let result = await query(`select distinct coursecode,sem,section,dept, count(coursecode) as totalhours from timetable academic_year like '${academic_year}' group by coursecode,sem,dept,section;;`)
+        let result = await query(`select distinct coursecode,sem,section,dept, count(coursecode) as totalhours from timetable where academic_year like '${academic_year}' group by coursecode,sem,dept,section;`)
         return res.status(200).json({result, message: "Course Class Details Fetched Successfully"});
     }
     catch(error){
