@@ -1,0 +1,13 @@
+{
+	"register": {
+		"username": "user1",
+		"password": "user1_password",
+		"email": "user1@user1.com",
+		"role": "faculty",
+		"phone":"9876543210",	
+		"name":"user1",	
+		"isactive":"1",	
+		"profilephoto":"poiuytrewsqlkjhgfdsamnbvcxz",	
+		"qualifications":"qwertyuiop"
+	}
+}
