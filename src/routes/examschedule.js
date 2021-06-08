@@ -5,11 +5,11 @@ const config = require('../../config.json');
 const moment = require('moment');
 
 router.post('/examscheduleinit', async (req, res) => {
-  let { es, sem, startdate, enddate } = req.body;
+  let { es, sem, startDate, endDate } = req.body;
   try {
     let result = await query(`select * from active_sem`);
     let { academic_year } = result[0];
-    await query(`delete from calendar where sem like '${sem}' and academic_year like '${academic_year}' and date>='${startdate}' and date<='${enddate}';`)
+    await query(`delete from calendar where sem = ${parseInt(sem)} and academic_year = ${parseInt(academic_year)} and date>='${startDate}' and date<='${endDate}';`)
     for(row of es){
       await query(`delete from exam_slot where date like '${row[0]}';`)
       await query(`insert into exam_slot values('${row[0]}','${row[1]}','${row[2]}','${row[3]}','${row[4]}','${row[5]}','${row[6]}','${academic_year}');`)
