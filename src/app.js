@@ -26,6 +26,10 @@ connect(function (err) {
 
 app.use('/api',require('./api'))
 
+app.get('/test',(req,res)=>{
+	res.send('hello')
+})
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening to port ${PORT}...`));
