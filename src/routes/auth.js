@@ -93,12 +93,12 @@ router.post('/register', verifyJWT, async (req, res) => {
 		let message = 'Registered Successfully!';
 		if (await mailer(email, `Successfully registered user:${username}`, 'ABKMV-Faculty Calendar Scheduler account creation'))
 			message += ' Confirmation mail sent.';
-		res.status(200).json({ message });
+		return res.status(200).json({ message });
 	} catch (error) {
 		if (error.code === 'ER_DUP_ENTRY') {
-			res.status(400).json({ message: 'username already taken' });
+			return res.status(400).json({ message: 'username already taken' });
 		}
-		res.status(500).json({ message: error });
+		return res.status(500).json({ message: error });
 	}
 });
 

@@ -1,0 +1,6 @@
+{
+	"studenttimetabledownload":{ "dept":"CSE", "sec":"C", "sem":"4" } ,
+	"facultytimetabledownload":{ "faculty":"admin" },
+	"readclassesunderdept":{ "dept":"CSE" },
+	"getcourselistundersem":{ "dept":"CSE","sem":"4" }
+} 
