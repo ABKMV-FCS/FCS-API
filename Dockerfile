@@ -2,9 +2,9 @@ FROM node:latest
 
 MAINTAINER Monish Raaj L
 
-COPY . .
+COPY . /var/www
 
-WORKDIR .
+WORKDIR /var/www
 
 RUN npm install
 
