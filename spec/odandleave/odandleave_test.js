@@ -1,44 +1,70 @@
-require('mocha');
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-chai.use(chaiHttp);
-const should = chai.should();
-const odandleave_config = require('./odandleave_config.json');
 const test_config = require('../test_config');
 const config = require('../../config.json');
-
 let admin_token = null;
+var Request = require('request')
 describe('OD and Leave', () => {
 
+    var dataA = {}
+    var dataF = {}
+    beforeAll((done)=>{
+        let { username, password } = config.admins[0];
+        let options = {
+            url: `${test_config.baseURL}/auth/login`,
+            form: { username, password },
+            
+        };
+        Request.post(options,(err,res)=>{
+            dataA.status = res.statusCode;
+            dataA.body = res.body;
+            admin_token = JSON.parse(res.body).token;
+            done();
+        });
+        
+    })
     it('Login as admin', (done) => {
-        let { username, password } = odandleave_config.auth;
-        chai.request(test_config.baseURL).post('/auth/login').send({ username, password }).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.have.property('token');
-            admin_token = res.body.token;
-            done();
-        });
-    });
-
+        expect(dataA.status).toBe(200)
+        expect(dataA.body).toContain('token');
+        done();
+    })
     it('Get slot details', (done) => {
-        chai.request(test_config.baseURL).get('/odandleave/getslotdetails').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.have.property('message');
+        let options = {
+            url: `${test_config.baseURL}/odandleave/getslotdetails`,
+            headers:{
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${admin_token}`
+            }
+        };
+        Request.get(options,(err,res)=>{
+            expect(res.statusCode).toBe(200)
+            expect(res.body).toContain('message')
             done();
-        });
+        })
     });
     it('Show OD request', (done) => {
-        chai.request(test_config.baseURL).get('/odandleave/showodrequest').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            res.should.have.status(200);
+        let options = {
+            url: `${test_config.baseURL}/odandleave/showodrequest`,
+            headers:{
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${admin_token}`
+            }
+        };
+        Request.get(options,(err,res)=>{
+            expect(res.statusCode).toBe(200)
             done();
-        });
+        })
     });
     it('Show leave request', (done) => {
-        chai.request(test_config.baseURL).get('/odandleave/showleaverequest').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            res.should.have.status(200);
+        let options = {
+            url: `${test_config.baseURL}/odandleave/showleaverequest`,
+            headers:{
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${admin_token}`
+            }
+        };
+        Request.get(options,(err,res)=>{
+            expect(res.statusCode).toBe(200)
             done();
-        });
+        })
     });
+})
 
-
-});
