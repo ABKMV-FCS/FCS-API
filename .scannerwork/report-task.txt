@@ -2,5 +2,5 @@ projectKey=fcs-api-1
 serverUrl=http://localhost:9000
 serverVersion=8.8.0.42792
 dashboardUrl=http://localhost:9000/dashboard?id=fcs-api-1
-ceTaskId=AXnyA34lG8-m0QLG0fzA
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AXnyA34lG8-m0QLG0fzA
+ceTaskId=AXnyj9pVG8-m0QLG0fzL
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXnyj9pVG8-m0QLG0fzL
