@@ -16,7 +16,6 @@ console.log(`connecting to SQL Server...`);
 connect(function (err) {
 	if(err){
 		console.log(`Cannot connect to SQL Server`);
-		process.exit(1);
 	}
 	else{
 			console.log('successfully connected to SQL server');
@@ -25,6 +24,10 @@ connect(function (err) {
 });
 
 app.use('/api',require('./api'))
+
+app.get('/test',(req,res)=>{
+	res.send('hello')
+})
 
 
 const PORT = process.env.PORT || 3000;
