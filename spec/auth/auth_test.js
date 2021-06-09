@@ -6,12 +6,13 @@ var Request = require('request')
 
 let faculty_token = null;
 let admin_token = null;
+let options;
 describe(' login as admin, register faculty, login as faculty,stay signed in,forgot password, forceremove faculty', () => {
     var dataA = {}
     var dataF = {}
     beforeAll((done) => {
         let { username, password } = config.admins[0];
-        let options = {
+        options = {
             url: `${test_config.baseURL}/auth/login`,
             form: { username, password }
         };
@@ -29,7 +30,6 @@ describe(' login as admin, register faculty, login as faculty,stay signed in,for
         done();
     })
     describe('Register Faculty, Login as Faculty', () => {
-        let dataF = {}
         console.log(admin_token);
         beforeAll((done) => {
             let { username,password,email,role,faculty,phone,name,isactive,profilephoto,qualifications } = auth_config.register;
@@ -53,7 +53,7 @@ describe(' login as admin, register faculty, login as faculty,stay signed in,for
         });
         it('Login as faculty', (done) => {
             let { username, password } = auth_config.register;
-            let options = {
+            options = {
                 url: `${test_config.baseURL}/auth/login`,
                 form: {
                     username, password
@@ -73,7 +73,7 @@ describe(' login as admin, register faculty, login as faculty,stay signed in,for
     })
     it('Stay signed in', (done) => {
         let { username, password } = auth_config.register;
-        let options = {
+        options = {
             url: `${test_config.baseURL}/auth/login`,
             form: {
                 username, password
@@ -88,28 +88,11 @@ describe(' login as admin, register faculty, login as faculty,stay signed in,for
             done();
         })
     });
-    // it('Forgot Password', (done) => {
-    //     let { username, password } = auth_config.register;
-    //     let options = {
-    //         url: `${test_config.baseURL}/auth/forgotpassword`,
-    //         form: {
-    //             username
-    //         },
-    //         headers: {
-    //             'Accept': 'application/json, text/plain',
-    //             'Authorization': `Bearer ${admin_token}`
-    //         }
-    //     };
-    //     Request.post(options, (err, res) => {
-    //         expect(res.statusCode).toBe(200)
-    //         expect(res.body).toContain('message');
-    //         done();
-    //     })
-    // });
+    
     afterAll((done) => {
 
-        let { username, password } = auth_config.register;
-        let options = {
+        let { username,  } = auth_config.register;
+        options = {
             url: `${test_config.baseURL}/auth/forceremoveuser`,
             form: {
                 username

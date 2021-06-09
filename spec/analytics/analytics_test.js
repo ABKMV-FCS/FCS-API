@@ -47,7 +47,7 @@ describe(' Course faculties, Class course details, Faculty working hours, Facult
             }
         };
         Request.get(options,(err,res)=>{
-            expect(res.statusCode).toBe(200)
+            expect(res.statusCode).toBe(200);
             expect(res.body).toContain('result')
             done();
         })
@@ -62,8 +62,8 @@ describe(' Course faculties, Class course details, Faculty working hours, Facult
             }
         };
         Request.get(options,(err,res)=>{
-            expect(res.statusCode).toBe(200)
-            expect(res.body).toContain('result')
+            expect(res.statusCode).toBe(200);
+            expect(res.body).toContain('result');
             done();
         })
     });
@@ -76,9 +76,9 @@ describe(' Course faculties, Class course details, Faculty working hours, Facult
             }
         };
         Request.get(options,(err,res)=>{
-            expect(res.statusCode).toBe(200)
-            expect(res.body).toContain('result')
-            done();
+            expect(res.statusCode).toBe(200);
+            expect(res.body).toContain('result');
+            done()
         })
     });    
 });

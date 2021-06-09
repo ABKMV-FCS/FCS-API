@@ -136,8 +136,10 @@ router.get('/initprofilechangedetails', async (req, res) => {
 });
 
 router.post('/changesubjectshandledinfo', async (req, res) => {
-	if (req.tokenDetails.role !== 'admin')
-	return res.status(400).json({ message: 'only admin can change subjecthandledinfo' });
+	if (req.tokenDetails.role !== 'admin'){
+		return res.status(400).json({ message: 'only admin can change subjecthandledinfo' });
+
+	}
 	let { faculty, coursecodes } = req.body;
 	try {
 		await query(`DELETE FROM subjects_handled WHERE faculty='${faculty}';`);

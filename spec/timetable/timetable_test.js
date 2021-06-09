@@ -109,7 +109,6 @@ describe('Login as admin, Download Student Timetable, read faculty, Download Fac
         })
     });
     it('read courses', (done) => {
-        let {dept} = timetable_config.readclassesunderdept
         let options = {
             url: `${test_config.baseURL}/timetable/readcourses/`,
             headers: {

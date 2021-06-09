@@ -5,7 +5,6 @@ var Request = require('request')
 describe('OD and Leave', () => {
 
     var dataA = {}
-    var dataF = {}
     beforeAll((done)=>{
         let { username, password } = config.admins[0];
         let options = {

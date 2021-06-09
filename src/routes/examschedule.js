@@ -12,7 +12,7 @@ router.post('/examscheduleinit', verifyJWT, async (req, res) => {
     let { academic_year } = result[0];
     await query(`delete from calendar where dept = '${dept}' and sem = ${parseInt(sem)} and academic_year = ${parseInt(academic_year)} and date>='${startDate}' and date<='${endDate}';`)
     console.log(es);
-    for(row of es){
+    for(let row of es){
       await query(`delete from exam_slot where date like '${row[0]}' and sem like '${row[3]}' and dept like '${row[4]}' and section like '${row[7]}' and academic_year like '${academic_year}';`)
       await query(`insert into exam_slot values('${row[0]}','${row[1]}','${row[2]}','${row[3]}','${row[7]}','${row[4]}','${row[5]}','${row[6]}','${academic_year}');`)
       let day = moment(row[0], "YYYY-MM-DD").format('dddd');
