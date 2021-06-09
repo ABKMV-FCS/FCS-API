@@ -5,7 +5,7 @@ const verifyJWT = require('../helpers/verify_jwt');
 const moment = require('moment');
 const config = require('../../config.json');
 
-router.post('/fetchtimetable',verifyJWT, async (req, res) => {
+router.post('/fetchtimetable', async (req, res) => {
   let { dept, sem, section } = req.body;
   try {
     let result = await query(`select * from active_sem`);
@@ -80,7 +80,7 @@ async function updateCalendarTable(start_date,end_date,section,dept,sem,academic
   
 }
 
-router.post('/updatetimetable',verifyJWT, async (req, res) => {
+router.post('/updatetimetable', async (req, res) => {
   try {
     let { slotdata, coursetofacultydata, dept, sem, section } = req.body;
     let course_faculty = {}
@@ -163,6 +163,65 @@ router.post('/updatetimetable',verifyJWT, async (req, res) => {
     return res.status(500).json({ message: error });
   }
   
+});
+
+async function getCalendarEvents({ forDate }, username) {
+	if (!(forDate)) throw new Error();
+	// starttime in vuetify calendar format
+	let events = [];
+  start_date =  new Date(forDate)
+  let result = await query(`select * from calendar c JOIN faculty_subject fs ON c.coursecode = fs.coursecode and c.section = fs.section and c.dept = fs.dept and c.sem = fs.sem and c.academic_year = fs.academic_year where fs.faculty like '${username}' and date >= '${forDate}' and date <= '${moment(start_date, "YYYY-MM-DD").add(7, 'days').format('YYYY-MM-DD')}' and slot not like 'et%';`);
+  let examresult = await query(`select * from calendar c JOIN exam_slot es ON c.coursecode = es.coursecode and c.dept = es.dept and c.sem = es.sem and c.section = es.section and c.academic_year = es.academic_year where es.faculty like '${username}' and c.date >= '${forDate}' and c.date <= '${moment(start_date, "YYYY-MM-DD").add(7, 'days').format('YYYY-MM-DD')}' and slot like 'et%';`);
+  let holidays = await query(`select * from holiday where date >= '${forDate}' and date <= '${moment(start_date, "YYYY-MM-DD").add(7, 'days').format('YYYY-MM-DD')}';`);
+  let slots = config.slots;
+  let exam_slots = config.exam_slots;
+	for (let event of result) {
+    let time = slots['slot'+event.slot].split('-');
+    events.push({
+      name: `${event.coursecode} Lecture`,
+      details: `Details:\nCourse: ${event.coursecode}\nDept: ${event.dept}\nSection: ${event.section}\nSem: ${event.sem}`,
+      start: `${event.date} ${time[0]}`,
+      end: `${event.date} ${time[1]}`,
+      color: 'blue',
+      timed: true
+    });      
+	}
+  for (let event of examresult) {
+    let time = [exam_slots[event.slot].st,exam_slots[event.slot].et];
+    events.push({
+      name: `Exam Invigilation Duty`,
+      details: `Details:\nExam: ${event.coursecode}\nDept: ${event.dept}\nSection: ${event.section}\nSem: ${event.sem}`,
+      start: `${event.date} ${time[0]}`,
+      end: `${event.date} ${time[1]}`,
+      color: 'orange',
+      timed: true
+    });
+  }
+  for (let event of holidays) {
+    events.push({
+      name: `Holiday`,
+      details: `Reason: ${event.reason}`,
+      start: `${event.date}`,
+      end: `${event.date}`,
+      color: 'red',
+      timed: false
+    });
+  }
+	return events;
+}
+
+router.post('/getcalendarevents', async (req, res) => {
+  if (req.tokenDetails.role !== 'faculty')
+		return res.status(400).json({ message: 'only faculties can view calendar data' });
+    try{
+  let username = req.tokenDetails.username;
+	let resp = await getCalendarEvents(req.body, username);
+	return res.status(200).json({data: resp, message: " Exam Schedule Fetched Successfully"});
+  }
+  catch(error){
+    console.log(error);
+    return res.status(500).json({message:error});
+  }
 });
 
 router.get('/test', async (req, res) => {
