@@ -30,13 +30,12 @@ describe(' login as admin, register faculty, login as faculty,stay signed in,for
     })
     describe('Register Faculty, Login as Faculty', () => {
         let dataF = {}
+        console.log(admin_token);
         beforeAll((done) => {
-            let { username, password } = auth_config.register;
+            let { username,password,email,role,faculty,phone,name,isactive,profilephoto,qualifications } = auth_config.register;
             options = {
                 url: `${test_config.baseURL}/auth/register`,
-                form: {
-                    username, password
-                },
+                form:{ username,password,email,role,faculty,phone,name,isactive,profilephoto,qualifications },
                 headers: {
                     'Accept': 'application/json, text/plain',
                     'Authorization': `Bearer ${admin_token}`
@@ -89,24 +88,24 @@ describe(' login as admin, register faculty, login as faculty,stay signed in,for
             done();
         })
     });
-    it('Forgot Password', (done) => {
-        let { username, password } = auth_config.register;
-        let options = {
-            url: `${test_config.baseURL}/auth/forgotpassword`,
-            form: {
-                username
-            },
-            headers: {
-                'Accept': 'application/json, text/plain',
-                'Authorization': `Bearer ${admin_token}`
-            }
-        };
-        Request.post(options, (err, res) => {
-            expect(res.statusCode).toBe(200)
-            expect(res.body).toContain('message');
-            done();
-        })
-    });
+    // it('Forgot Password', (done) => {
+    //     let { username, password } = auth_config.register;
+    //     let options = {
+    //         url: `${test_config.baseURL}/auth/forgotpassword`,
+    //         form: {
+    //             username
+    //         },
+    //         headers: {
+    //             'Accept': 'application/json, text/plain',
+    //             'Authorization': `Bearer ${admin_token}`
+    //         }
+    //     };
+    //     Request.post(options, (err, res) => {
+    //         expect(res.statusCode).toBe(200)
+    //         expect(res.body).toContain('message');
+    //         done();
+    //     })
+    // });
     afterAll((done) => {
 
         let { username, password } = auth_config.register;

@@ -1,195 +1,356 @@
-require('mocha');
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-chai.use(chaiHttp);
-const should = chai.should();
+const auth_config = require('../auth/auth_config.json')
 const profile_config = require('./profile_config.json');
 const test_config = require('../test_config');
 const config = require('../../config.json');
 
 let subjects_handled = null;
 let admin_token = null;
-let user_token = null
+let faculty_token = null
+var Request = require('request')
 describe('login as faculty, read profile details, change profile request, login as admin, show profile change requests, accept profile change, ', () => {
-
-    it('Login as faculty', (done) => {
-        let { username, password } = profile_config.login;
-        chai.request(test_config.baseURL).post('/auth/login').send({ username, password }).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.have.property('token');
-            user_token = res.body.token;
+    var dataA = {}
+    var dataF = {}
+    beforeAll((done) => {
+        console.log("login as admin");
+        let { username, password } = config.admins[0];
+        let options = {
+            url: `${test_config.baseURL}/auth/login`,
+            form: { username, password }
+        };
+        Request.post(options, (err, res) => {
+            dataA.status = res.statusCode;
+            dataA.body = res.body;
+            admin_token = JSON.parse(res.body).token;
+            console.log("profile_test.js 24 admin token",admin_token)
             done();
         });
-    });
 
+    })
+    it('Login as admin', (done) => {
+        expect(dataA.status).toBe(200)
+        expect(dataA.body).toContain('token');
+        done();
+    })
+    describe('Register Faculty, Login as Faculty', () => {
+        console.log(admin_token);
+        let dataF = {}
+        beforeAll((done) => {
+            let { username,password,email,role,faculty,phone,name,isactive,profilephoto,qualifications } = auth_config.register;
+            options = {
+                url: `${test_config.baseURL}/auth/register`,
+                form: { username,password,email,role,faculty,phone,name,isactive,profilephoto,qualifications },
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.post(options, (err, res) => {
+                dataF.status = res.statusCode;
+                done();
+            })
+        })
+        it('Register faculty', (done) => {
+            expect(dataF.status).toBe(200);
+            done();
+        });
+        it('Login as faculty', (done) => {
+            let { username, password } = auth_config.register;
+            let options = {
+                url: `${test_config.baseURL}/auth/login`,
+                form: {
+                    username, password
+                }
+            };
+            Request.post(options, (err, res) => {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('token');
+                faculty_token = JSON.parse(res.body).token;
+                console.log("profile_test.js 70 res body",res.body)
+            console.log("profile_test.js 71 faculty token",faculty_token)
+
+                done();
+            })
+        });
+    });
     it('Read profile details', (done) => {
         let { username } = profile_config.login;
-        chai.request(test_config.baseURL).get('/profile/readuserinfo/' + username).set('Authorization', `Bearer ${user_token}`).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('userinfo');
-            res.body.userinfo[0].should.have.property('username').eql(username);
+        let options = {
+            url: `${test_config.baseURL}/profile/readuserinfo/${username}`,
+            
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${faculty_token}`
+            }
+        };
+        Request.get(options, (err, res) => {
+            expect(res.statusCode).toBe(200)
+            expect(res.body).toContain('userinfo');
             done();
-        });
+        })
     });
-
     it('Change profile request', (done) => {
         let { username } = profile_config.login;
-        chai.request(test_config.baseURL).post('/profile/requestprofilechange/').set('Authorization', `Bearer ${user_token}`).send({ username }).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message').eql("Request sent Successfully!");
+        console.log('faculty token: ',faculty_token);
+        let options = {
+            url: `${test_config.baseURL}/profile/requestprofilechange/`,
+            form: {
+                username
+            },
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${faculty_token}`
+            }
+        };
+        Request.post(options, (err, res) => {
+            expect(res.statusCode).toBe(200)
+            expect(JSON.parse(res.body).message).toEqual("Request sent Successfully!");
             done();
-        });
+        })
     });
-
-    it('Login as admin', (done) => {
-        let { username, password } = config.admins[0];
-        chai.request(test_config.baseURL).post('/auth/login').send({ username, password }).end((err, res) => {
-            res.should.have.status(200);
-            admin_token = res.body.token;
-            res.body.should.have.property('token');
+    describe('Login As admin',()=>{
+        var dataA = {}
+        beforeAll((done) => {
+            let { username, password } = config.admins[0];
+            let options = {
+                url: `${test_config.baseURL}/auth/login`,
+                form: { username, password }
+            };
+            Request.post(options, (err, res) => {
+                dataA.status = res.statusCode;
+                dataA.body = res.body;
+                admin_token = JSON.parse(res.body).token;
+                done();
+            });
+    
+        })
+        it('Login as admin', (done) => {
+            expect(dataA.status).toBe(200)
+            expect(dataA.body).toContain('token');
             done();
+        })
+        it('Show Profile Change Requests', (done) => {
+            let options = {
+                url: `${test_config.baseURL}/profile/showprofilechangerequest`,
+                
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.get(options, (err, res) => {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('requests');
+                done();
+            })
         });
-    });
-    it('Show Profile Change Requests', (done) => {
-        chai.request(test_config.baseURL).get('/profile/showprofilechangerequest').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('requests');
-            done();
+        it('Accept Profile Change', (done) => {
+            let {faculty } = profile_config.deleteprofile
+            let options = {
+                url: `${test_config.baseURL}/profile/acceptprofilechangerequest`,
+                form:{faculty},
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.post(options, (err, res) => {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('message');
+                done();
+            })
         });
-    });
-    it('Accept Profile Change', (done) => {
-        let { username } = profile_config.login;
-        let faculty = username
-        chai.request(test_config.baseURL).post('/profile/acceptprofilechangerequest').set('Authorization', `Bearer ${admin_token}`).send({faculty}).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message');
-            done();
-        });
-    });
-});
-
+    })
+})
 describe('login as faculty, read profile details, change profile request, login as admin, show profile change requests, reject profile change, ', () => {
 
-    it('Login as faculty', (done) => {
-        let { username, password } = profile_config.login;
-        chai.request(test_config.baseURL).post('/auth/login').send({ username, password }).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.have.property('token');
-            user_token = res.body.token;
-            done();
-        });
-    });
-
+    
     it('Read profile details', (done) => {
         let { username } = profile_config.login;
-        chai.request(test_config.baseURL).get('/profile/readuserinfo/' + username).set('Authorization', `Bearer ${user_token}`).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('userinfo');
-            res.body.userinfo[0].should.have.property('username').eql(username);
+        let options = {
+            url: `${test_config.baseURL}/profile/readuserinfo/${username}`,
+            
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${faculty_token}`
+            }
+        };
+        Request.get(options, (err, res) => {
+            console.log("profile_test 208 res body",res.body);
+            expect(res.statusCode).toBe(200)
+            expect(res.body).toContain('userinfo');
             done();
-        });
+        })
     });
-
     it('Change profile request', (done) => {
         let { username } = profile_config.login;
-        chai.request(test_config.baseURL).post('/profile/requestprofilechange/').set('Authorization', `Bearer ${user_token}`).send({ username }).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message').eql("Request sent Successfully!");
+        let options = {
+            url: `${test_config.baseURL}/profile/requestprofilechange/`,
+            form: {
+                username
+            },
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${faculty_token}`
+            }
+        };
+        Request.post(options, (err, res) => {
+            expect(res.statusCode).toBe(200)
+            expect(JSON.parse(res.body).message).toEqual("Request sent Successfully!");
             done();
-        });
+        })
     });
+    describe('Login As admin',()=>{
+        var dataA = {}
+        beforeAll((done) => {
+            let { username, password } = config.admins[0];
+            let options = {
+                url: `${test_config.baseURL}/auth/login`,
+                form: { username, password }
+            };
+            Request.post(options, (err, res) => {
+                dataA.status = res.statusCode;
+                dataA.body = res.body;
+                admin_token = JSON.parse(res.body).token;
+                done();
+            });
+    
+        })
+        it('Login as admin', (done) => {
+            expect(dataA.status).toBe(200)
+            expect(dataA.body).toContain('token');
+            done();
+        })
+        it('Show Profile Change Requests', (done) => {
+            let options = {
+                url: `${test_config.baseURL}/profile/showprofilechangerequest`,
+                
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.get(options, (err, res) => {
+                expect(res.statusCode).toBe(200)
+                done();
+            })
+        });
+        it('Reject Profile Change', (done) => {
+            let {faculty } = profile_config.deleteprofile
+            let options = {
+                url: `${test_config.baseURL}/profile/rejectprofilechangerequest`,
+                form:{faculty},
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.post(options, (err, res) => {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('message');
+                done();
+            })
+        });
+    })
+})
 
-    it('Login as admin', (done) => {
-        let { username, password } = config.admins[0];
-        chai.request(test_config.baseURL).post('/auth/login').send({ username, password }).end((err, res) => {
-            res.should.have.status(200);
-            admin_token = res.body.token;
-            res.body.should.have.property('token');
-            done();
-        });
-    });
-    it('Show Profile Change Requests', (done) => {
-        chai.request(test_config.baseURL).get('/profile/showprofilechangerequest').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('requests');
-            done();
-        });
-    });
-    it('Reject Profile Change', (done) => {
-        let { username } = profile_config.login;
-        let faculty = username
-        chai.request(test_config.baseURL).post('/profile/rejectprofilechangerequest').set('Authorization', `Bearer ${admin_token}`).send({faculty}).end((err, res) => {
-
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message');
-            done();
-        });
-    });
-});
 describe('Login as admin,change user info, get all users, Read user info, login as admin, show profile change requests, reject profile change, ', () => {
-
-    it('Login as admin', (done) => {
-        let { username, password } = config.admins[0];
-        chai.request(test_config.baseURL).post('/auth/login').send({ username, password }).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            admin_token = res.body.token;
-            res.body.should.have.property('token');
-            done();
-        });
-    });
+    var dataA = {}
+        beforeAll((done) => {
+            let { username, password } = config.admins[0];
+            let options = {
+                url: `${test_config.baseURL}/auth/login`,
+                form: { username, password }
+            };
+            Request.post(options, (err, res) => {
+                dataA.status = res.statusCode;
+                dataA.body = res.body;
+                admin_token = JSON.parse(res.body).token;
+                done();
+            });
     
-    it('Change user info', (done) => {
-        let { oldusername, username, profilephoto, qualifications, phone, name, email } = profile_config.changeuserinfo;
-        chai.request(test_config.baseURL).post('/profile/changeuserinfo').set('Authorization', `Bearer ${admin_token}`).send({ oldusername, username, profilephoto, qualifications, phone, name, email }).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('message');
+        })
+        it('Login as admin', (done) => {
+            expect(dataA.status).toBe(200)
+            expect(dataA.body).toContain('token');
             done();
+        })
+        it('Change user info', (done) => {
+            let { oldusername, username, profilephoto, qualifications, phone, name, email } = profile_config.changeuserinfo;
+            let options = {
+                url: `${test_config.baseURL}/profile/changeuserinfo`,
+                form:{ oldusername, username, profilephoto, qualifications, phone, name, email },
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.post(options, (err, res) => {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('message');
+                done();
+            })
         });
-    });
+        it('get all users', (done) => {
+            let options = {
+                url: `${test_config.baseURL}/profile/getallusers`,
+                
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.get(options, (err, res) => {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('users');
+                done();
+            })
+        });
+        it('Read user info', (done) => {
+            let { username } = profile_config.login;
+            let options = {
+                url: `${test_config.baseURL}/profile/readuserinfo/${username}`,
+                
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.get(options, (err, res) => {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('userinfo');
+                done();
+            })
+        });
+        it('init profile change details', (done) => {
+            let { username } = profile_config.login;
+            let options = {
+                url: `${test_config.baseURL}/profile/initprofilechangedetails`,
+                
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.get(options, (err, res) => {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('result');
+                done();
+            })
+        });
 
-    it('get all users', (done) => {
-        chai.request(test_config.baseURL).get('/profile/getallusers').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('users');
-            done();
+        it('ForceRemove faculty', (done) => {
+            let { username } = profile_config.login;
+            let options = {
+                url: `${test_config.baseURL}/auth/forceremoveuser`,
+                form:{ username },
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.post(options, (err, res) => {
+                expect(res.statusCode).toBe(200)
+                done();
+            })
         });
-    });
-
-    it('Read user info', (done) => {
-        let { username } = profile_config.login;
-        chai.request(test_config.baseURL).get(`/profile/readuserinfo/`+username).set('Authorization', `Bearer ${user_token}`).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('userinfo')
-            done();
-        });
-    });
-
-    it('init profile change details', (done) => {
-        chai.request(test_config.baseURL).get('/profile/initprofilechangedetails').set('Authorization', `Bearer ${admin_token}`).end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('result');
-            done();
-        });
-    });
-    
-    it('ForceRemove faculty', (done) => {
-        let { username } = profile_config.login;
-        chai.request(test_config.baseURL).post('/auth/forceremoveuser').set('Authorization', `Bearer ${admin_token}`).send({ username }).end((err, res) => {
-            res.should.have.status(200);
-            done();
-        });
-    });
 });
