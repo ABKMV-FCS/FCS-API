@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/app/precache-manifest.a29d211631014e137489d17bd781eb63.js"
+  "/precache-manifest.c6a33a121533f5bc4f137d601f2682d5.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "faculty_calendar_scheduler_ui"});
