@@ -40,8 +40,7 @@ router.post('/getexamschedule', async(req,res)=>{
     let courses  = await query(`select coursecode from sem_course where dept like '${dept}' and sem like '${sem}';`);
     courses = courses.map(element => element.coursecode);
 
-    let faculties = await query(`select name as faculty from user where isactive='true' and role='faculty'`);
-    faculties = faculties.map(element => element.faculty);
+    let faculties = await query(`select username as faculty, name from user where isactive='true' and role='faculty'`);
 
     let result = await query(`select * from exam_slot where sem = '${sem}' and date>='${startdate}' and date <= '${enddate}' and dept like '${dept}' and type like '${type}';`)
     return res.status(200).json({result, sections, faculties, courses, totalslot: Object.keys(examslot), academic_year,  message: " Exam Schedule Fetched Successfully"})

@@ -100,7 +100,7 @@ router.get('/getallfaculties', async (req, res) => {
 	if (req.tokenDetails.role !== 'admin')
 		return res.status(400).json({ message: 'only admin can get all faculty info' });
 	try {
-		let results = await query(`select name as faculty from user where isactive='true' and role='faculty'`);
+		let results = await query(`select username as faculty, name from user where isactive='true' and role='faculty'`);
 		if (results.length == 0) { return res.status(400).json({ message: 'no faculties found' }); }
 		return res.status(200).json({ faculties: results });
 	} catch (error) {
