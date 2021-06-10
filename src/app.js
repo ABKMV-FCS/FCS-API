@@ -3,12 +3,9 @@ const bodyParser = require('body-parser');
 const { query, connect } = require('./db');
 const morgan = require('morgan');
 const app = express();
-app.disable("x-powered-by");
+// app.disable("x-powered-by");
 const cors = require('cors');
-let corsOptions = {
-  origin: 'http://localhost:3000' 
-};
-app.use(cors(corsOptions));
+app.use(cors());
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
