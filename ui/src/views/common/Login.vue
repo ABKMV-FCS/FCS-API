@@ -47,7 +47,7 @@
                 :disabled="loading"
                 @click.prevent="googleLogin"
                 block
-                >Login with google</v-btn
+                >Login with <img style="margin-left:7px;height:20px;width:20px" src="../../assets/gicon.png" alt=""></v-btn
               >
               <v-btn
                 :disabled="loading"
