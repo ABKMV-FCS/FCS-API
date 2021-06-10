@@ -12,6 +12,7 @@ Vue.use(VueApexCharts)
 Vue.component('apexchart', VueApexCharts)
 
 Vue.config.productionTip = false
+Vue.config.silent=true
 
 Vue.prototype.$http = axios.create({
 	baseURL: 'http://localhost:3000'
