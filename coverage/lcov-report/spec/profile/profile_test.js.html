@@ -1,0 +1,1151 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for spec/profile/profile_test.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">spec/profile</a> profile_test.js</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>180/180</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>49/49</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>180/180</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a></a><a href='#L1'>1</a>
+<a></a><a href='#L2'>2</a>
+<a></a><a href='#L3'>3</a>
+<a></a><a href='#L4'>4</a>
+<a></a><a href='#L5'>5</a>
+<a></a><a href='#L6'>6</a>
+<a></a><a href='#L7'>7</a>
+<a></a><a href='#L8'>8</a>
+<a></a><a href='#L9'>9</a>
+<a></a><a href='#L10'>10</a>
+<a></a><a href='#L11'>11</a>
+<a></a><a href='#L12'>12</a>
+<a></a><a href='#L13'>13</a>
+<a></a><a href='#L14'>14</a>
+<a></a><a href='#L15'>15</a>
+<a></a><a href='#L16'>16</a>
+<a></a><a href='#L17'>17</a>
+<a></a><a href='#L18'>18</a>
+<a></a><a href='#L19'>19</a>
+<a></a><a href='#L20'>20</a>
+<a></a><a href='#L21'>21</a>
+<a></a><a href='#L22'>22</a>
+<a></a><a href='#L23'>23</a>
+<a></a><a href='#L24'>24</a>
+<a></a><a href='#L25'>25</a>
+<a></a><a href='#L26'>26</a>
+<a></a><a href='#L27'>27</a>
+<a></a><a href='#L28'>28</a>
+<a></a><a href='#L29'>29</a>
+<a></a><a href='#L30'>30</a>
+<a></a><a href='#L31'>31</a>
+<a></a><a href='#L32'>32</a>
+<a></a><a href='#L33'>33</a>
+<a></a><a href='#L34'>34</a>
+<a></a><a href='#L35'>35</a>
+<a></a><a href='#L36'>36</a>
+<a></a><a href='#L37'>37</a>
+<a></a><a href='#L38'>38</a>
+<a></a><a href='#L39'>39</a>
+<a></a><a href='#L40'>40</a>
+<a></a><a href='#L41'>41</a>
+<a></a><a href='#L42'>42</a>
+<a></a><a href='#L43'>43</a>
+<a></a><a href='#L44'>44</a>
+<a></a><a href='#L45'>45</a>
+<a></a><a href='#L46'>46</a>
+<a></a><a href='#L47'>47</a>
+<a></a><a href='#L48'>48</a>
+<a></a><a href='#L49'>49</a>
+<a></a><a href='#L50'>50</a>
+<a></a><a href='#L51'>51</a>
+<a></a><a href='#L52'>52</a>
+<a></a><a href='#L53'>53</a>
+<a></a><a href='#L54'>54</a>
+<a></a><a href='#L55'>55</a>
+<a></a><a href='#L56'>56</a>
+<a></a><a href='#L57'>57</a>
+<a></a><a href='#L58'>58</a>
+<a></a><a href='#L59'>59</a>
+<a></a><a href='#L60'>60</a>
+<a></a><a href='#L61'>61</a>
+<a></a><a href='#L62'>62</a>
+<a></a><a href='#L63'>63</a>
+<a></a><a href='#L64'>64</a>
+<a></a><a href='#L65'>65</a>
+<a></a><a href='#L66'>66</a>
+<a></a><a href='#L67'>67</a>
+<a></a><a href='#L68'>68</a>
+<a></a><a href='#L69'>69</a>
+<a></a><a href='#L70'>70</a>
+<a></a><a href='#L71'>71</a>
+<a></a><a href='#L72'>72</a>
+<a></a><a href='#L73'>73</a>
+<a></a><a href='#L74'>74</a>
+<a></a><a href='#L75'>75</a>
+<a></a><a href='#L76'>76</a>
+<a></a><a href='#L77'>77</a>
+<a></a><a href='#L78'>78</a>
+<a></a><a href='#L79'>79</a>
+<a></a><a href='#L80'>80</a>
+<a></a><a href='#L81'>81</a>
+<a></a><a href='#L82'>82</a>
+<a></a><a href='#L83'>83</a>
+<a></a><a href='#L84'>84</a>
+<a></a><a href='#L85'>85</a>
+<a></a><a href='#L86'>86</a>
+<a></a><a href='#L87'>87</a>
+<a></a><a href='#L88'>88</a>
+<a></a><a href='#L89'>89</a>
+<a></a><a href='#L90'>90</a>
+<a></a><a href='#L91'>91</a>
+<a></a><a href='#L92'>92</a>
+<a></a><a href='#L93'>93</a>
+<a></a><a href='#L94'>94</a>
+<a></a><a href='#L95'>95</a>
+<a></a><a href='#L96'>96</a>
+<a></a><a href='#L97'>97</a>
+<a></a><a href='#L98'>98</a>
+<a></a><a href='#L99'>99</a>
+<a></a><a href='#L100'>100</a>
+<a></a><a href='#L101'>101</a>
+<a></a><a href='#L102'>102</a>
+<a></a><a href='#L103'>103</a>
+<a></a><a href='#L104'>104</a>
+<a></a><a href='#L105'>105</a>
+<a></a><a href='#L106'>106</a>
+<a></a><a href='#L107'>107</a>
+<a></a><a href='#L108'>108</a>
+<a></a><a href='#L109'>109</a>
+<a></a><a href='#L110'>110</a>
+<a></a><a href='#L111'>111</a>
+<a></a><a href='#L112'>112</a>
+<a></a><a href='#L113'>113</a>
+<a></a><a href='#L114'>114</a>
+<a></a><a href='#L115'>115</a>
+<a></a><a href='#L116'>116</a>
+<a></a><a href='#L117'>117</a>
+<a></a><a href='#L118'>118</a>
+<a></a><a href='#L119'>119</a>
+<a></a><a href='#L120'>120</a>
+<a></a><a href='#L121'>121</a>
+<a></a><a href='#L122'>122</a>
+<a></a><a href='#L123'>123</a>
+<a></a><a href='#L124'>124</a>
+<a></a><a href='#L125'>125</a>
+<a></a><a href='#L126'>126</a>
+<a></a><a href='#L127'>127</a>
+<a></a><a href='#L128'>128</a>
+<a></a><a href='#L129'>129</a>
+<a></a><a href='#L130'>130</a>
+<a></a><a href='#L131'>131</a>
+<a></a><a href='#L132'>132</a>
+<a></a><a href='#L133'>133</a>
+<a></a><a href='#L134'>134</a>
+<a></a><a href='#L135'>135</a>
+<a></a><a href='#L136'>136</a>
+<a></a><a href='#L137'>137</a>
+<a></a><a href='#L138'>138</a>
+<a></a><a href='#L139'>139</a>
+<a></a><a href='#L140'>140</a>
+<a></a><a href='#L141'>141</a>
+<a></a><a href='#L142'>142</a>
+<a></a><a href='#L143'>143</a>
+<a></a><a href='#L144'>144</a>
+<a></a><a href='#L145'>145</a>
+<a></a><a href='#L146'>146</a>
+<a></a><a href='#L147'>147</a>
+<a></a><a href='#L148'>148</a>
+<a></a><a href='#L149'>149</a>
+<a></a><a href='#L150'>150</a>
+<a></a><a href='#L151'>151</a>
+<a></a><a href='#L152'>152</a>
+<a></a><a href='#L153'>153</a>
+<a></a><a href='#L154'>154</a>
+<a></a><a href='#L155'>155</a>
+<a></a><a href='#L156'>156</a>
+<a></a><a href='#L157'>157</a>
+<a></a><a href='#L158'>158</a>
+<a></a><a href='#L159'>159</a>
+<a></a><a href='#L160'>160</a>
+<a></a><a href='#L161'>161</a>
+<a></a><a href='#L162'>162</a>
+<a></a><a href='#L163'>163</a>
+<a></a><a href='#L164'>164</a>
+<a></a><a href='#L165'>165</a>
+<a></a><a href='#L166'>166</a>
+<a></a><a href='#L167'>167</a>
+<a></a><a href='#L168'>168</a>
+<a></a><a href='#L169'>169</a>
+<a></a><a href='#L170'>170</a>
+<a></a><a href='#L171'>171</a>
+<a></a><a href='#L172'>172</a>
+<a></a><a href='#L173'>173</a>
+<a></a><a href='#L174'>174</a>
+<a></a><a href='#L175'>175</a>
+<a></a><a href='#L176'>176</a>
+<a></a><a href='#L177'>177</a>
+<a></a><a href='#L178'>178</a>
+<a></a><a href='#L179'>179</a>
+<a></a><a href='#L180'>180</a>
+<a></a><a href='#L181'>181</a>
+<a></a><a href='#L182'>182</a>
+<a></a><a href='#L183'>183</a>
+<a></a><a href='#L184'>184</a>
+<a></a><a href='#L185'>185</a>
+<a></a><a href='#L186'>186</a>
+<a></a><a href='#L187'>187</a>
+<a></a><a href='#L188'>188</a>
+<a></a><a href='#L189'>189</a>
+<a></a><a href='#L190'>190</a>
+<a></a><a href='#L191'>191</a>
+<a></a><a href='#L192'>192</a>
+<a></a><a href='#L193'>193</a>
+<a></a><a href='#L194'>194</a>
+<a></a><a href='#L195'>195</a>
+<a></a><a href='#L196'>196</a>
+<a></a><a href='#L197'>197</a>
+<a></a><a href='#L198'>198</a>
+<a></a><a href='#L199'>199</a>
+<a></a><a href='#L200'>200</a>
+<a></a><a href='#L201'>201</a>
+<a></a><a href='#L202'>202</a>
+<a></a><a href='#L203'>203</a>
+<a></a><a href='#L204'>204</a>
+<a></a><a href='#L205'>205</a>
+<a></a><a href='#L206'>206</a>
+<a></a><a href='#L207'>207</a>
+<a></a><a href='#L208'>208</a>
+<a></a><a href='#L209'>209</a>
+<a></a><a href='#L210'>210</a>
+<a></a><a href='#L211'>211</a>
+<a></a><a href='#L212'>212</a>
+<a></a><a href='#L213'>213</a>
+<a></a><a href='#L214'>214</a>
+<a></a><a href='#L215'>215</a>
+<a></a><a href='#L216'>216</a>
+<a></a><a href='#L217'>217</a>
+<a></a><a href='#L218'>218</a>
+<a></a><a href='#L219'>219</a>
+<a></a><a href='#L220'>220</a>
+<a></a><a href='#L221'>221</a>
+<a></a><a href='#L222'>222</a>
+<a></a><a href='#L223'>223</a>
+<a></a><a href='#L224'>224</a>
+<a></a><a href='#L225'>225</a>
+<a></a><a href='#L226'>226</a>
+<a></a><a href='#L227'>227</a>
+<a></a><a href='#L228'>228</a>
+<a></a><a href='#L229'>229</a>
+<a></a><a href='#L230'>230</a>
+<a></a><a href='#L231'>231</a>
+<a></a><a href='#L232'>232</a>
+<a></a><a href='#L233'>233</a>
+<a></a><a href='#L234'>234</a>
+<a></a><a href='#L235'>235</a>
+<a></a><a href='#L236'>236</a>
+<a></a><a href='#L237'>237</a>
+<a></a><a href='#L238'>238</a>
+<a></a><a href='#L239'>239</a>
+<a></a><a href='#L240'>240</a>
+<a></a><a href='#L241'>241</a>
+<a></a><a href='#L242'>242</a>
+<a></a><a href='#L243'>243</a>
+<a></a><a href='#L244'>244</a>
+<a></a><a href='#L245'>245</a>
+<a></a><a href='#L246'>246</a>
+<a></a><a href='#L247'>247</a>
+<a></a><a href='#L248'>248</a>
+<a></a><a href='#L249'>249</a>
+<a></a><a href='#L250'>250</a>
+<a></a><a href='#L251'>251</a>
+<a></a><a href='#L252'>252</a>
+<a></a><a href='#L253'>253</a>
+<a></a><a href='#L254'>254</a>
+<a></a><a href='#L255'>255</a>
+<a></a><a href='#L256'>256</a>
+<a></a><a href='#L257'>257</a>
+<a></a><a href='#L258'>258</a>
+<a></a><a href='#L259'>259</a>
+<a></a><a href='#L260'>260</a>
+<a></a><a href='#L261'>261</a>
+<a></a><a href='#L262'>262</a>
+<a></a><a href='#L263'>263</a>
+<a></a><a href='#L264'>264</a>
+<a></a><a href='#L265'>265</a>
+<a></a><a href='#L266'>266</a>
+<a></a><a href='#L267'>267</a>
+<a></a><a href='#L268'>268</a>
+<a></a><a href='#L269'>269</a>
+<a></a><a href='#L270'>270</a>
+<a></a><a href='#L271'>271</a>
+<a></a><a href='#L272'>272</a>
+<a></a><a href='#L273'>273</a>
+<a></a><a href='#L274'>274</a>
+<a></a><a href='#L275'>275</a>
+<a></a><a href='#L276'>276</a>
+<a></a><a href='#L277'>277</a>
+<a></a><a href='#L278'>278</a>
+<a></a><a href='#L279'>279</a>
+<a></a><a href='#L280'>280</a>
+<a></a><a href='#L281'>281</a>
+<a></a><a href='#L282'>282</a>
+<a></a><a href='#L283'>283</a>
+<a></a><a href='#L284'>284</a>
+<a></a><a href='#L285'>285</a>
+<a></a><a href='#L286'>286</a>
+<a></a><a href='#L287'>287</a>
+<a></a><a href='#L288'>288</a>
+<a></a><a href='#L289'>289</a>
+<a></a><a href='#L290'>290</a>
+<a></a><a href='#L291'>291</a>
+<a></a><a href='#L292'>292</a>
+<a></a><a href='#L293'>293</a>
+<a></a><a href='#L294'>294</a>
+<a></a><a href='#L295'>295</a>
+<a></a><a href='#L296'>296</a>
+<a></a><a href='#L297'>297</a>
+<a></a><a href='#L298'>298</a>
+<a></a><a href='#L299'>299</a>
+<a></a><a href='#L300'>300</a>
+<a></a><a href='#L301'>301</a>
+<a></a><a href='#L302'>302</a>
+<a></a><a href='#L303'>303</a>
+<a></a><a href='#L304'>304</a>
+<a></a><a href='#L305'>305</a>
+<a></a><a href='#L306'>306</a>
+<a></a><a href='#L307'>307</a>
+<a></a><a href='#L308'>308</a>
+<a></a><a href='#L309'>309</a>
+<a></a><a href='#L310'>310</a>
+<a></a><a href='#L311'>311</a>
+<a></a><a href='#L312'>312</a>
+<a></a><a href='#L313'>313</a>
+<a></a><a href='#L314'>314</a>
+<a></a><a href='#L315'>315</a>
+<a></a><a href='#L316'>316</a>
+<a></a><a href='#L317'>317</a>
+<a></a><a href='#L318'>318</a>
+<a></a><a href='#L319'>319</a>
+<a></a><a href='#L320'>320</a>
+<a></a><a href='#L321'>321</a>
+<a></a><a href='#L322'>322</a>
+<a></a><a href='#L323'>323</a>
+<a></a><a href='#L324'>324</a>
+<a></a><a href='#L325'>325</a>
+<a></a><a href='#L326'>326</a>
+<a></a><a href='#L327'>327</a>
+<a></a><a href='#L328'>328</a>
+<a></a><a href='#L329'>329</a>
+<a></a><a href='#L330'>330</a>
+<a></a><a href='#L331'>331</a>
+<a></a><a href='#L332'>332</a>
+<a></a><a href='#L333'>333</a>
+<a></a><a href='#L334'>334</a>
+<a></a><a href='#L335'>335</a>
+<a></a><a href='#L336'>336</a>
+<a></a><a href='#L337'>337</a>
+<a></a><a href='#L338'>338</a>
+<a></a><a href='#L339'>339</a>
+<a></a><a href='#L340'>340</a>
+<a></a><a href='#L341'>341</a>
+<a></a><a href='#L342'>342</a>
+<a></a><a href='#L343'>343</a>
+<a></a><a href='#L344'>344</a>
+<a></a><a href='#L345'>345</a>
+<a></a><a href='#L346'>346</a>
+<a></a><a href='#L347'>347</a>
+<a></a><a href='#L348'>348</a>
+<a></a><a href='#L349'>349</a>
+<a></a><a href='#L350'>350</a>
+<a></a><a href='#L351'>351</a>
+<a></a><a href='#L352'>352</a>
+<a></a><a href='#L353'>353</a>
+<a></a><a href='#L354'>354</a>
+<a></a><a href='#L355'>355</a>
+<a></a><a href='#L356'>356</a>
+<a></a><a href='#L357'>357</a>
+<a></a><a href='#L358'>358</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const auth_config = require('../auth/auth_config.json')
+const profile_config = require('./profile_config.json');
+const test_config = require('../test_config');
+const config = require('../../config.json');
+&nbsp;
+let subjects_handled = null;
+let admin_token = null;
+let faculty_token = null
+var Request = require('request')
+describe('login as faculty, read profile details, change profile request, login as admin, show profile change requests, accept profile change, ', () =&gt; {
+    var dataA = {}
+    var dataF = {}
+    beforeAll((done) =&gt; {
+        console.log("login as admin");
+        let { username, password } = config.admins[0];
+        let options = {
+            url: `${test_config.baseURL}/auth/login`,
+            form: { username, password }
+        };
+        Request.post(options, (err, res) =&gt; {
+            dataA.status = res.statusCode;
+            dataA.body = res.body;
+            admin_token = JSON.parse(res.body).token;
+            console.log("profile_test.js 24 admin token",admin_token)
+            done();
+        });
+&nbsp;
+    })
+    it('Login as admin', (done) =&gt; {
+        expect(dataA.status).toBe(200)
+        expect(dataA.body).toContain('token');
+        done();
+    })
+    describe('Register Faculty, Login as Faculty', () =&gt; {
+        console.log(admin_token);
+        dataF = {}
+        beforeAll((done) =&gt; {
+            let { username,password,email,role,faculty,phone,name,isactive,profilephoto,qualifications } = auth_config.register;
+            let options = {
+                url: `${test_config.baseURL}/auth/register`,
+                form: { username,password,email,role,faculty,phone,name,isactive,profilephoto,qualifications },
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.post(options, (err, res) =&gt; {
+                dataF.status = res.statusCode;
+                done();
+            })
+        })
+        it('Register faculty', (done) =&gt; {
+            expect(dataF.status).toBe(200);
+            done();
+        });
+        it('Login as faculty', (done) =&gt; {
+            let { username, password } = auth_config.register;
+            let options = {
+                url: `${test_config.baseURL}/auth/login`,
+                form: {
+                    username, password
+                }
+            };
+            Request.post(options, (err, res) =&gt; {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('token');
+                faculty_token = JSON.parse(res.body).token;
+                console.log("profile_test.js 70 res body",res.body)
+            console.log("profile_test.js 71 faculty token",faculty_token)
+&nbsp;
+                done();
+            })
+        });
+    });
+    it('Read profile details', (done) =&gt; {
+        let { username } = profile_config.login;
+        let options = {
+            url: `${test_config.baseURL}/profile/readuserinfo/${username}`,
+            
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${faculty_token}`
+            }
+        };
+        Request.get(options, (err, res) =&gt; {
+            expect(res.statusCode).toBe(200)
+            expect(res.body).toContain('userinfo');
+            done();
+        })
+    });
+    it('Change profile request', (done) =&gt; {
+        let { username } = profile_config.login;
+        console.log('faculty token: ',faculty_token);
+        let options = {
+            url: `${test_config.baseURL}/profile/requestprofilechange/`,
+            form: {
+                username
+            },
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${faculty_token}`
+            }
+        };
+        Request.post(options, (err, res) =&gt; {
+            expect(res.statusCode).toBe(200)
+            expect(JSON.parse(res.body).message).toEqual("Request sent Successfully!");
+            done();
+        })
+    });
+    describe('Login As admin',()=&gt;{
+        dataA = {}
+        beforeAll((done) =&gt; {
+            let { username, password } = config.admins[0];
+            let options = {
+                url: `${test_config.baseURL}/auth/login`,
+                form: { username, password }
+            };
+            Request.post(options, (err, res) =&gt; {
+                dataA.status = res.statusCode;
+                dataA.body = res.body;
+                admin_token = JSON.parse(res.body).token;
+                done();
+            });
+    
+        })
+        it('Login as admin', (done) =&gt; {
+            expect(dataA.status).toBe(200);
+            expect(dataA.body).toContain('token');
+            done();
+        })
+        it('Show Profile Change Requests', (done) =&gt; {
+            let options = {
+                url: `${test_config.baseURL}/profile/showprofilechangerequest`,
+                
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.get(options, (err, res) =&gt; {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('requests');
+                done();
+            })
+        });
+        it('Accept Profile Change', (done) =&gt; {
+            let {faculty } = profile_config.deleteprofile
+            let options = {
+                url: `${test_config.baseURL}/profile/acceptprofilechangerequest`,
+                form:{faculty},
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.post(options, (err, res) =&gt; {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('message');
+                done();
+            })
+        });
+    })
+})
+describe('login as faculty, read profile details, change profile request, login as admin, show profile change requests, reject profile change, ', () =&gt; {
+&nbsp;
+    
+    it('Read profile details', (done) =&gt; {
+        let { username } = profile_config.login;
+        let options = {
+            url: `${test_config.baseURL}/profile/readuserinfo/${username}`,
+            
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${faculty_token}`
+            }
+        };
+        Request.get(options, (err, res) =&gt; {
+            console.log("profile_test 208 res body",res.body);
+            expect(res.statusCode).toBe(200)
+            expect(res.body).toContain('userinfo');
+            done();
+        })
+    });
+    it('Change profile request', (done) =&gt; {
+        let { username } = profile_config.login;
+        let options = {
+            url: `${test_config.baseURL}/profile/requestprofilechange/`,
+            form: {
+                username
+            },
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Authorization': `Bearer ${faculty_token}`
+            }
+        };
+        Request.post(options, (err, res) =&gt; {
+            expect(res.statusCode).toBe(200);
+            expect(JSON.parse(res.body).message).toEqual("Request sent Successfully!");
+            done();
+        })
+    });
+    describe('Login As admin',()=&gt;{
+        var dataA = {}
+        beforeAll((done) =&gt; {
+            var { username, password } = config.admins[0];
+            let options = {
+                url: `${test_config.baseURL}/auth/login`,
+                form: { username, password }
+            };
+            Request.post(options, (err, res) =&gt; {
+                dataA.status = res.statusCode
+                dataA.body = res.body;
+                admin_token = JSON.parse(res.body).token;
+                done();
+            });
+    
+        })
+        it('Login as admin', (done) =&gt; {
+            expect(dataA.status).toBe(200);
+            let body = dataA.body
+            expect(body).toContain('token');
+            done();
+        })
+        it('Show Profile Change Requests', (done) =&gt; {
+            let options = {
+                url: `${test_config.baseURL}/profile/showprofilechangerequest`,
+                
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.get(options, (err, res) =&gt; {
+                expect(res.statusCode).toBe(200)
+                done();
+            })
+        });
+        it('Reject Profile Change', (done) =&gt; {
+            let {faculty } = profile_config.deleteprofile
+            let options = {
+                url: `${test_config.baseURL}/profile/rejectprofilechangerequest`,
+                form:{faculty},
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.post(options, (err, res) =&gt; {
+                expect(res.statusCode).toBe(200);
+                expect(res.body).toContain('message');
+                done();
+            })
+        });
+    })
+})
+&nbsp;
+describe('Login as admin,change user info, get all users, Read user info, login as admin, show profile change requests, reject profile change, ', () =&gt; {
+    var dataA = {}
+        beforeAll((done) =&gt; {
+            var { username, password } = config.admins[0];
+            let options = {
+                url: `${test_config.baseURL}/auth/login`,
+                form: { username, password }
+            };
+            Request.post(options, (err, res) =&gt; {
+                dataA.body = res.body;
+                dataA.status = res.statusCode;
+                admin_token = JSON.parse(res.body).token;
+                done();
+            });
+    
+        })
+        it('Login as admin', (done) =&gt; {
+            let status = dataA.status;
+            expect(status).toBe(200);
+            expect(dataA.body).toContain('token');
+            done();
+        })
+        it('Change user info', (done) =&gt; {
+            let { oldusername, username, profilephoto, qualifications, phone, name, email } = profile_config.changeuserinfo;
+            let options = {
+                url: `${test_config.baseURL}/profile/changeuserinfo`,
+                form:{ oldusername, username, profilephoto, qualifications, phone, name, email },
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.post(options, (err, res) =&gt; {
+                let status = res.statusCode;
+                expect(status).toBe(200)
+                expect(res.body).toContain('message');
+                done();
+            })
+        });
+        it('get all users', (done) =&gt; {
+            let options = {
+                url: `${test_config.baseURL}/profile/getallusers`,
+                
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.get(options, (err, res) =&gt; {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('users');
+                done();
+            })
+        });
+        it('Read user info', (done) =&gt; {
+            let { username } = profile_config.login;
+            let options = {
+                url: `${test_config.baseURL}/profile/readuserinfo/${username}`,
+                
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.get(options, (err, res) =&gt; {
+                expect(res.statusCode).toBe(200);
+                expect(res.body).toContain('userinfo');
+                done();
+            })
+        });
+        it('init profile change details', (done) =&gt; {
+            let options = {
+                url: `${test_config.baseURL}/profile/initprofilechangedetails`,
+                
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.get(options, (err, res) =&gt; {
+                expect(res.statusCode).toBe(200)
+                expect(res.body).toContain('result');
+                done();
+            })
+        });
+&nbsp;
+        it('ForceRemove faculty', (done) =&gt; {
+            let { username } = profile_config.login;
+            let options = {
+                url: `${test_config.baseURL}/auth/forceremoveuser`,
+                form:{ username },
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Authorization': `Bearer ${admin_token}`
+                }
+            };
+            Request.post(options, (err, res) =&gt; {
+                expect(res.statusCode).toBe(200)
+                done();
+            })
+        });
+});</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
+                at Thu Jun 10 2021 01:35:43 GMT+0530 (India Standard Time)
+            </div>
+        </div>
+        <script src="../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
+    </body>
+</html>
+    

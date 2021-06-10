@@ -33,10 +33,10 @@ describe('login as faculty, read profile details, change profile request, login 
     })
     describe('Register Faculty, Login as Faculty', () => {
         console.log(admin_token);
-        let dataF = {}
+        dataF = {}
         beforeAll((done) => {
             let { username,password,email,role,faculty,phone,name,isactive,profilephoto,qualifications } = auth_config.register;
-            options = {
+            let options = {
                 url: `${test_config.baseURL}/auth/register`,
                 form: { username,password,email,role,faculty,phone,name,isactive,profilephoto,qualifications },
                 headers: {
@@ -108,7 +108,7 @@ describe('login as faculty, read profile details, change profile request, login 
         })
     });
     describe('Login As admin',()=>{
-        var dataA = {}
+        dataA = {}
         beforeAll((done) => {
             let { username, password } = config.admins[0];
             let options = {
@@ -124,7 +124,7 @@ describe('login as faculty, read profile details, change profile request, login 
     
         })
         it('Login as admin', (done) => {
-            expect(dataA.status).toBe(200)
+            expect(dataA.status).toBe(200);
             expect(dataA.body).toContain('token');
             done();
         })
@@ -194,7 +194,7 @@ describe('login as faculty, read profile details, change profile request, login 
             }
         };
         Request.post(options, (err, res) => {
-            expect(res.statusCode).toBe(200)
+            expect(res.statusCode).toBe(200);
             expect(JSON.parse(res.body).message).toEqual("Request sent Successfully!");
             done();
         })
@@ -202,13 +202,13 @@ describe('login as faculty, read profile details, change profile request, login 
     describe('Login As admin',()=>{
         var dataA = {}
         beforeAll((done) => {
-            let { username, password } = config.admins[0];
+            var { username, password } = config.admins[0];
             let options = {
                 url: `${test_config.baseURL}/auth/login`,
                 form: { username, password }
             };
             Request.post(options, (err, res) => {
-                dataA.status = res.statusCode;
+                dataA.status = res.statusCode
                 dataA.body = res.body;
                 admin_token = JSON.parse(res.body).token;
                 done();
@@ -216,8 +216,9 @@ describe('login as faculty, read profile details, change profile request, login 
     
         })
         it('Login as admin', (done) => {
-            expect(dataA.status).toBe(200)
-            expect(dataA.body).toContain('token');
+            expect(dataA.status).toBe(200);
+            let body = dataA.body
+            expect(body).toContain('token');
             done();
         })
         it('Show Profile Change Requests', (done) => {
@@ -245,7 +246,7 @@ describe('login as faculty, read profile details, change profile request, login 
                 }
             };
             Request.post(options, (err, res) => {
-                expect(res.statusCode).toBe(200)
+                expect(res.statusCode).toBe(200);
                 expect(res.body).toContain('message');
                 done();
             })
@@ -256,21 +257,22 @@ describe('login as faculty, read profile details, change profile request, login 
 describe('Login as admin,change user info, get all users, Read user info, login as admin, show profile change requests, reject profile change, ', () => {
     var dataA = {}
         beforeAll((done) => {
-            let { username, password } = config.admins[0];
+            var { username, password } = config.admins[0];
             let options = {
                 url: `${test_config.baseURL}/auth/login`,
                 form: { username, password }
             };
             Request.post(options, (err, res) => {
-                dataA.status = res.statusCode;
                 dataA.body = res.body;
+                dataA.status = res.statusCode;
                 admin_token = JSON.parse(res.body).token;
                 done();
             });
     
         })
         it('Login as admin', (done) => {
-            expect(dataA.status).toBe(200)
+            let status = dataA.status;
+            expect(status).toBe(200);
             expect(dataA.body).toContain('token');
             done();
         })
@@ -285,7 +287,8 @@ describe('Login as admin,change user info, get all users, Read user info, login 
                 }
             };
             Request.post(options, (err, res) => {
-                expect(res.statusCode).toBe(200)
+                let status = res.statusCode;
+                expect(status).toBe(200)
                 expect(res.body).toContain('message');
                 done();
             })
@@ -316,13 +319,12 @@ describe('Login as admin,change user info, get all users, Read user info, login 
                 }
             };
             Request.get(options, (err, res) => {
-                expect(res.statusCode).toBe(200)
+                expect(res.statusCode).toBe(200);
                 expect(res.body).toContain('userinfo');
                 done();
             })
         });
         it('init profile change details', (done) => {
-            let { username } = profile_config.login;
             let options = {
                 url: `${test_config.baseURL}/profile/initprofilechangedetails`,
                 

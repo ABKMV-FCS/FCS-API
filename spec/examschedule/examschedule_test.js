@@ -22,8 +22,8 @@ describe('get examschedule, download examschedule', () => {
             form:downloadScheduleDetails,
         };
         Request.post(options,(err,res)=>{
-            expect(res.statusCode).toBe(200)
-            expect(res.body).toContain('message')
+            expect(res.statusCode).toBe(200);
+            expect(res.body).toContain('message');
             done();
         })
     });
