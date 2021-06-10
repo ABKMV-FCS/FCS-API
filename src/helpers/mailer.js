@@ -9,9 +9,9 @@ const emailTransporter = nodemailer.createTransport({
 	auth: config.emailAuth,
 	debug: false,
 	logger: false,
-	tls: {
-		rejectUnauthorized: false
-	}
+	// tls: {
+	// 	rejectUnauthorized: false
+	// }
 });
 
 
