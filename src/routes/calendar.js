@@ -217,7 +217,7 @@ router.post('/getcalendarevents', async (req, res) => {
   }
   try {
     let username = req.tokenDetails.username;
-    let resp = getCalendarEvents(req.body, username);
+    let resp = await getCalendarEvents(req.body, username);
     return res.status(200).json({ data: resp, message: " Exam Schedule Fetched Successfully" });
   }
   catch (error) {
