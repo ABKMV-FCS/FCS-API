@@ -8,10 +8,7 @@ const emailTransporter = nodemailer.createTransport({
 	secure: true,
 	auth: config.emailAuth,
 	debug: false,
-	logger: false,
-	// tls: {
-	// 	rejectUnauthorized: false
-	// }
+	logger: false
 });
 
 
