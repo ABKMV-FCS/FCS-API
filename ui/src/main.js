@@ -15,7 +15,7 @@ Vue.config.productionTip = false
 Vue.config.silent=true
 
 Vue.prototype.$http = axios.create({
-	baseURL: 'http://localhost:3000'
+	baseURL: 'https://us-central1-poetic-park-284210.cloudfunctions.net/app'
 });
 Vue.prototype.$http.interceptors.response.use(config => config, error => {
 	if (error.response) {
