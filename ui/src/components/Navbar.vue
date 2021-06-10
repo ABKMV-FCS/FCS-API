@@ -26,9 +26,9 @@
       ></v-app-bar-nav-icon>
       <v-toolbar-title>Faculty Calendar Scheduler</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn rounded v-if="Token !== null" to="Dashboard" text color="white">{{
-        Name
-      }}</v-btn>
+      <v-btn rounded v-if="Token !== null" to="Dashboard" text color="white"
+        >Dashboard</v-btn
+      >
       <v-btn rounded v-if="Token === null" to="Login" text>Login</v-btn>
       <v-btn rounded v-if="Token === null" to="StudentSubscribe" text
         >Subscribe</v-btn
@@ -54,12 +54,6 @@ export default {
           name: "Dashboard",
           url: "Dashboard",
           icon: "mdi-home",
-          role: ["admin", "faculty"],
-        },
-        {
-          name: "Analytics",
-          url: "Analytics",
-          icon: "mdi-google-analytics",
           role: ["admin", "faculty"],
         },
         {
@@ -96,7 +90,7 @@ export default {
           name: "Request OD",
           url: "requestod",
           icon: "mdi-account-hard-hat",
-          role: ["admin", "faculty"],
+          role: ["faculty"],
         },
         {
           name: "Manage OD",
@@ -108,7 +102,7 @@ export default {
           name: "Request Leave",
           url: "requestleave",
           icon: "mdi-briefcase-account",
-          role: ["admin", "faculty"],
+          role: ["faculty"],
         },
         {
           name: "Manage Leave",
@@ -132,6 +126,12 @@ export default {
           name: "Reset Password",
           url: "resetpassword",
           icon: "mdi-account-lock-outline",
+          role: ["admin", "faculty"],
+        },
+        {
+          name: "Analytics",
+          url: "Analytics",
+          icon: "mdi-google-analytics",
           role: ["admin", "faculty"],
         },
         {

@@ -23,9 +23,31 @@ import store from '../store/index';
 
 Vue.use(VueRouter);
 
+const authGuardRoles = {
+	"Dashboard": ["admin", "faculty"],
+	"ManageUsers": ["admin"],
+	"ManageTimeTable": ["admin"],
+	"ManageExamSchedule": ["admin"],
+	"ManageFacultyCourses": ["admin"],
+	"EmergencyHoliday": ["admin"],
+	"ResetPassword": ["admin", "faculty"],
+	"ProfileUpdateRequest": ["admin"],
+	"RequestProfileChange": ["admin", "faculty"],
+	"RequestOD": ["faculty"],
+	"ManageOD": ["admin"],
+	"RequestLeave": ["faculty"],
+	"ManageLeave": ["admin"],
+	"Analytics": ["admin", "faculty"]
+}
+
 const authGuard = (to, from, next) => {
-	if (store.getters.Token)
-		next();
+	if (store.getters.Token) {
+		console.log(to,from);
+		if(authGuardRoles[to.name].includes(store.getters.Role))
+			next();
+		else
+			next('Dashboard')
+	}
 	else
 		next('Login');
 };
