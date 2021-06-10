@@ -7,6 +7,9 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
+app.use(express.static('public'));
+
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -29,6 +32,12 @@ app.get('/test',(req,res)=>{
 	res.send('hello')
 })
 
+
+
+app.get('*',(req,res)=>{
+	let path=require('path')
+	res.sendFile(path.resolve('public/index.html'));
+})
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening to port ${PORT}...`));
