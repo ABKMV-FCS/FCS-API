@@ -79,6 +79,7 @@ export default {
             `/api/profile/readsubjectshandledinfo/${this.postData.faculty}`
           )
         ).data.subjects_handledinfo;
+        this.postData.coursecodes = [];
         for (let data of res) {
           this.postData.coursecodes.push(data.coursecode);
         }
