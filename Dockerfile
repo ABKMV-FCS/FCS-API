@@ -2,7 +2,7 @@ FROM node:latest
 
 MAINTAINER Monish Raaj L
 
-RUN echo "Tryin to build my first application"
+RUN echo "building our node app"
 
 COPY . /var/www
 
